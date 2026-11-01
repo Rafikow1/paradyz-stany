@@ -1,0 +1,100 @@
+# =====================================================================
+#  KONFIGURACJA SCRAPERA STANÓW MAGAZYNOWYCH – Ceramika Paradyż
+#  Wszystko, co może się zmienić po stronie sklepów (adresy, selektory,
+#  ID sklepów, endpointy API), jest TUTAJ, a nie w kodzie.
+# =====================================================================
+
+general:
+  headless: false           # false = widać okno przeglądarki (mniej blokad, można rozwiązać captcha ręcznie)
+  browser_channel: "chrome" # "chrome" = zainstalowany Google Chrome (mniej blokad); gdy go brak – automatycznie Chromium
+  user_agent: null          # null = naturalny UA przeglądarki (najbezpieczniej)
+  accept_language: "pl-PL,pl;q=0.9,en-US;q=0.6,en;q=0.5"
+  delay_min: 2.0            # losowe opóźnienie między zapytaniami (sekundy)
+  delay_max: 5.0
+  api_delay_min: 0.3        # krótsze opóźnienie dla lekkich zapytań o stany (wewnątrz otwartej strony)
+  api_delay_max: 0.8
+  page_timeout_ms: 45000
+  max_retries: 3            # ile razy ponawiać przy blokadzie / timeoucie
+  block_wait_seconds: [60, 300, 900, 1800]  # przerwy po kolejnych blokadach z rzędu (s): 1 min, 5 min, 15 min, 30 min
+  proxies: []               # rotacja proxy, np. ["http://user:haslo@1.2.3.4:8000", "http://5.6.7.8:8000"]
+  not_found_recheck_days: 7 # produkt nieznaleziony – ponowne szukanie dopiero po X dniach
+  output_dir: "output"
+  snoop: false              # true = zapisuj wszystkie odpowiedzi JSON (XHR/Fetch) do data/snoop/ – do szukania API
+
+# Kiedy program wpisuje ostrzeżenie w kolumnie "Sygnal"
+signals:
+  low_store_packs: 5        # mniej opakowań w sklepie = "niski stan"
+  paradyz_min_m2: 100       # Paradyż "ma towar", jeśli stan >= tej wartości
+
+markets:
+  # ------------------------------------------------------------------
+  leroy:
+    enabled: true
+    name: "Leroy Merlin"
+    base_url: "https://www.leroymerlin.pl"
+    search_url: "https://www.leroymerlin.pl/szukaj?q={query}"   # nieużywany, gdy ustawiony search_input_selector
+    # LM: wpisujemy EAN w okienko "Czego szukasz?" i Enter – sklep sam przenosi na kartę produktu
+    search_input_selector: "input[placeholder*='Czego szukasz'], input[type='search']"
+    product_link_selectors:
+      - "a[href*='/produkty/'][href$='.html']"
+      - "[data-testid*='product'] a[href$='.html']"
+      - "article a[href$='.html']"
+    product_id_regex: "-(\\d{8})\\.html"    # numer artykułu LM w URL, np. ...-85019050.html
+    # stan sklepu pokazany na karcie produktu, np. "13 na stanie w sklepie Gdańsk Oliwa" (opakowania)
+    home_city: "Gdańsk"               # sklep wybierany przy pierwszym uruchomieniu
+    # miasta wpisywane w panelu "Sklepy w pobliżu" – razem pokrywają całą Polskę.
+    # Mniej miast = szybciej, ale mniej sklepów w raporcie.
+    store_search_cities: ["Gdańsk", "Słupsk", "Koszalin", "Szczecin", "Gorzów Wielkopolski", "Zielona Góra",
+                          "Poznań", "Kalisz", "Leszno", "Bydgoszcz", "Toruń", "Włocławek", "Olsztyn", "Elbląg",
+                          "Białystok", "Siedlce", "Warszawa", "Piaseczno", "Jabłonna", "Pruszków", "Płock",
+                          "Łódź", "Piotrków Trybunalski", "Radom", "Lublin", "Kielce", "Częstochowa", "Opole",
+                          "Wrocław", "Legnica", "Wałbrzych", "Gliwice", "Katowice", "Sosnowiec", "Bielsko-Biała",
+                          "Rybnik", "Kraków", "Tarnów", "Nowy Sącz", "Rzeszów"]
+    page_store_regex: "(?P<qty>\\d+|[Bb]rak)\\s*na stanie w sklepie\\s+(?P<store>[^\\n]+)"
+    discontinued_phrases:
+      - "produkt jest niedostępny"
+      - "produkt został wycofany"
+      - "nie ma już w ofercie"
+    # Endpoint stanów w sklepach stacjonarnych – uzupełnij po analizie w DevTools (patrz README, krok "API").
+    # Dostępne zmienne: {product_id} {store_id} {ean}
+    store_stock_api: null
+    quantity_keys: ["stock", "stockQuantity", "availableQuantity", "quantity", "qty", "available"]
+    stores: []   # uzupełnimy po diagnozie (diagnoza.bat)
+
+  # ------------------------------------------------------------------
+  castorama:
+    enabled: true
+    name: "Castorama"
+    base_url: "https://www.castorama.pl"
+    search_url: "https://www.castorama.pl/search?term={query}"  # SPRAWDŹ przy pierwszym uruchomieniu
+    product_link_selectors:
+      - "a[href*='_CAPL.prd']"
+      - "a[href*='.prd']"
+      - "[data-test-id*='product'] a"
+      - "article a[href]"
+    product_id_regex: "(\\d{8,}_CAPL|\\d{8,})"
+    discontinued_phrases:
+      - "produkt niedostępny"
+      - "produkt wycofany"
+    store_stock_api: null
+    quantity_keys: ["stockLevel", "stock", "quantity", "availableQuantity", "qty"]
+    stores: []   # uzupełnimy po diagnozie (diagnoza.bat)
+
+  # ------------------------------------------------------------------
+  obi:
+    enabled: true
+    name: "OBI"
+    base_url: "https://www.obi.pl"
+    search_url: "https://www.obi.pl/search/{query}/"            # SPRAWDŹ przy pierwszym uruchomieniu
+    product_link_selectors:
+      - "a[href*='/p/']"
+      - "a[data-ui-name*='product']"
+      - "[data-testid*='product'] a"
+      - "article a[href]"
+    product_id_regex: "/p/(\\d+)"
+    discontinued_phrases:
+      - "nie jest już dostępny"
+      - "artykuł niedostępny"
+    store_stock_api: null
+    quantity_keys: ["stock", "quantity", "amount", "availableQuantity", "qty"]
+    stores: []   # uzupełnimy po diagnozie (diagnoza.bat)

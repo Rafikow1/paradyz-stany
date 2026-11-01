@@ -1,0 +1,9 @@
+input.xlsx
+*.xlsx
+!dane/*.enc
+output/
+logs/
+data/
+wyniki/
+__pycache__/
+.venv/

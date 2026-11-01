@@ -1,0 +1,98 @@
+name: Nocny odczyt stanów
+
+on:
+  schedule:
+    - cron: "17 23 * * *"        # codziennie ok. 00:17 czasu polskiego (zimą), 01:17 latem
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Test: ile produktów na sieć (puste = wszystkie)"
+        required: false
+        default: ""
+      rynki:
+        description: "Test: które sieci, np. 'obi castorama' (puste = wszystkie)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nocny-odczyt
+  cancel-in-progress: false
+
+jobs:
+  odczyt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Instalacja
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Odszyfrowanie listy produktów
+        run: |
+          python -m utils.publish decrypt dane/input.xlsx.enc input.xlsx
+          mkdir -p data
+          cp dane/url_map.json data/url_map.json 2>/dev/null || true
+          cp dane/lm_wspolrzedne_miast.json data/lm_wspolrzedne_miast.json 2>/dev/null || true
+
+      - name: Odczyt sklepów
+        continue-on-error: true
+        timeout-minutes: 270
+        run: |
+          ARGS="--input input.xlsx"
+          if [ -n "${{ github.event.inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"; fi
+          if [ -n "${{ github.event.inputs.rynki }}" ]; then ARGS="$ARGS --rynki ${{ github.event.inputs.rynki }}"; fi
+          xvfb-run -a python main.py $ARGS
+
+      - name: Dokończenie nieudanych (po blokadach)
+        continue-on-error: true
+        timeout-minutes: 45
+        run: |
+          if ls output/stany_magazynowe_2*.xlsx >/dev/null 2>&1; then
+            xvfb-run -a python main.py --input input.xlsx --dokoncz
+          fi
+
+      - name: Publikacja na stronie (zaszyfrowane)
+        run: |
+          if [ -f output/stany_magazynowe_AKTUALNE.xlsx ]; then
+            python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs
+          else
+            echo "Brak raportu – strona bez zmian"; exit 1
+          fi
+
+      - name: Dziennik (zaszyfrowany) do pobrania
+        if: always()
+        run: |
+          mkdir -p wyniki && zip -qr wyniki/dziennik.zip logs data/debug 2>/dev/null || true
+          if [ -f wyniki/dziennik.zip ]; then python -m utils.publish encrypt wyniki/dziennik.zip wyniki/dziennik.zip.enc; rm wyniki/dziennik.zip; fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dziennik-zaszyfrowany
+          path: wyniki/
+          retention-days: 14
+
+      - name: Zapis do repozytorium
+        if: always()
+        run: |
+          cp data/url_map.json dane/url_map.json 2>/dev/null || true
+          cp data/lm_wspolrzedne_miast.json dane/lm_wspolrzedne_miast.json 2>/dev/null || true
+          git config user.name "nocny-odczyt"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs dane/url_map.json dane/lm_wspolrzedne_miast.json 2>/dev/null || git add docs
+          git diff --cached --quiet || git commit -m "Odczyt $(date +'%Y-%m-%d %H:%M')"
+          git push
