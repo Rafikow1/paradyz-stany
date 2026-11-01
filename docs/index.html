@@ -33,6 +33,11 @@ button.ghost{background:transparent;color:var(--accent)}
 button:disabled{opacity:.5;cursor:default}
 .err{color:var(--red);font-size:13px;min-height:1.2em;margin-top:8px}
 .filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end}
+.admin{margin:28px 0 8px;font-size:13px;color:var(--muted)}
+.admin summary{cursor:pointer}
+.admin .card{margin-top:10px}
+input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+ol{padding-left:20px} ol li{margin:4px 0}
 .check{display:flex;gap:8px;align-items:center;font-size:14px;padding:10px 0}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:120px}
@@ -92,25 +97,60 @@ a{color:var(--accent)}
         <select id="fStore"><option value="">Wszystkie sklepy</option></select></div>
       <div><label for="fText">Produkt / EAN / indeks / miasto</label>
         <input id="fText" type="search" placeholder="np. Arctic, Gdańsk"></div>
-      <div>
-        <label class="check"><input type="checkbox" id="fSig"> Tylko sygnały (braki, niski stan)</label>
+      <div><label for="fLevel">Stan w sklepie</label>
+        <select id="fLevel">
+          <option value="">Wszystkie</option>
+          <option value="lowzero">Brak lub niski</option>
+          <option value="zero">Tylko brak (0)</option>
+          <option value="low">Tylko niski (poniżej progu)</option>
+          <option value="ok">Dostępny (od progu)</option>
+        </select></div>
+      <div><label for="fThr">Próg niskiego stanu (m²)</label>
+        <input id="fThr" type="number" min="0" step="1" value="15"></div>
+      <div><label for="fSort">Sortuj</label>
+        <select id="fSort">
+          <option value="prio">Najpierw braki i niskie</option>
+          <option value="m2asc">Najmniej m² w sklepie</option>
+          <option value="parDesc">Najwięcej u Paradyża</option>
+          <option value="name">Nazwa produktu</option>
+          <option value="store">Sklep</option>
+        </select></div>
+      <div style="grid-column:span 2">
+        <label class="check"><input type="checkbox" id="fPar"> Tylko gdy Paradyż ma towar (min. <input id="fParMin" type="number" min="0" step="10" value="100" style="width:80px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg)"> m²/szt.)</label>
         <label class="check" style="padding-top:0"><input type="checkbox" id="fOnline"> Pokaż sklep internetowy</label>
       </div>
     </div>
+    <p class="sub" style="margin:8px 2px 0">Niski stan liczony w m². Dla produktów bez przelicznika m² (np. inserta w szt.) – mniej niż 5 opakowań.</p>
 
     <div class="stats">
       <div class="stat"><b id="sRows">0</b><span>pozycji</span></div>
       <div class="stat"><b id="sProd">0</b><span>produktów</span></div>
       <div class="stat"><b id="sStores">0</b><span>sklepów</span></div>
-      <div class="stat"><b id="sSig">0</b><span>sygnałów</span></div>
+      <div class="stat"><b id="sZero" style="color:var(--red)">0</b><span>braków (0)</span></div>
+      <div class="stat"><b id="sLow" style="color:var(--amber)">0</b><span>niskich stanów</span></div>
     </div>
 
     <table>
       <thead><tr><th>Produkt</th><th>Sieć / sklep</th><th>Stan (opak.)</th><th>Stan m²</th>
-        <th>Sygnał</th><th>Stan Paradyż</th><th>Cena/m²</th><th></th></tr></thead>
+        <th>Stan</th><th>Stan Paradyż</th><th>Cena/m²</th><th></th></tr></thead>
       <tbody id="rows"></tbody>
     </table>
     <div class="more"><button class="ghost hidden" id="moreBtn">Pokaż więcej</button></div>
+
+    <details class="admin">
+      <summary>Dla administratora: wgraj nową listę stanów Paradyża</summary>
+      <div class="card">
+        <ol>
+          <li>Wybierz plik Excel ze „Zbiorczą listą” (kolumny: EAN, Indeks, Nazwa, Market, Stan Magazynowy…).</li>
+          <li>Kliknij <b>Zaszyfruj</b> – pobierze się plik <code>input.xlsx.enc</code> (szyfrowany tym samym hasłem co strona).</li>
+          <li>Otwórz <a href="https://github.com/Rafikow1/paradyz-stany/upload/main/dane" target="_blank" rel="noopener">wgrywanie w GitHub</a>, przeciągnij ten plik i kliknij <b>Commit changes</b>.</li>
+          <li>Nowa lista zostanie użyta przy najbliższym nocnym odczycie.</li>
+        </ol>
+        <input type="file" id="upFile" accept=".xlsx">
+        <button id="upBtn" style="margin-left:8px">Zaszyfruj</button>
+        <div class="sub" id="upMsg" style="margin-top:8px"></div>
+      </div>
+    </details>
   </section>
 </div>
 
@@ -151,15 +191,37 @@ async function login(pw){
 const fmt = (v, d=0) => v==null || v==="" ? "" : (typeof v==="number" ? v.toLocaleString("pl-PL",{maximumFractionDigits:d}) : v);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+let PER_PACK = {};
+const num = v => typeof v === "number" ? v : null;
+function m2Of(r){
+  if(num(r.q) === null) return null;
+  if(num(r.qm) !== null) return r.qm;
+  const pk = r.pk || PER_PACK[r.e];
+  return pk ? Math.round(r.q * pk * 100) / 100 : null;
+}
+function level(r, thr){        // "zero" | "low" | "ok" | null
+  if(num(r.q) === null) return null;
+  if(r.q === 0) return "zero";
+  const m = m2Of(r);
+  if(m !== null) return m < thr ? "low" : "ok";
+  return r.q < 5 ? "low" : "ok";
+}
 function init(){
   $("genInfo").textContent = "Odczyt: " + DATA.generated + " · " + DATA.rows.length.toLocaleString("pl-PL") + " pozycji";
+  DATA.rows.forEach(r => { if(r.pk && !PER_PACK[r.e]) PER_PACK[r.e] = r.pk;
+                           if(!PER_PACK[r.e] && num(r.q) > 0 && num(r.qm) > 0) PER_PACK[r.e] = r.qm / r.q; });
+  const dps = DATA.rows.map(r => r.dp).filter(Boolean);
+  if(dps.length) $("genInfo").textContent += " · stany Paradyża z: " + [...new Set(dps)].sort().join(", ");
   const markets = [...new Set(DATA.rows.map(r => r.m))].filter(Boolean).sort();
   markets.forEach(m => $("fMarket").add(new Option(m, m)));
+  try { const t = localStorage.getItem("thr"); if(t) $("fThr").value = t; } catch(e){}
   fillStores();
-  ["fMarket","fStore","fText","fSig","fOnline"].forEach(id => $(id).addEventListener("input", () => { if(id==="fMarket") fillStores(); apply(); }));
+  ["fMarket","fStore","fText","fLevel","fThr","fSort","fPar","fParMin","fOnline"].forEach(id =>
+    $(id).addEventListener("input", () => { if(id==="fMarket") fillStores(); if(id==="fThr") { try{localStorage.setItem("thr",$("fThr").value)}catch(e){} } apply(); }));
   $("moreBtn").onclick = () => render(false);
   $("csvBtn").onclick = downloadCsv;
   $("xlsBtn").onclick = downloadXlsx;
+  $("upBtn").onclick = encryptUpload;
   apply();
 }
 function fillStores(){
@@ -171,26 +233,45 @@ function fillStores(){
 }
 function apply(){
   const m = $("fMarket").value, st = $("fStore").value, t = $("fText").value.trim().toLowerCase();
-  const sig = $("fSig").checked, online = $("fOnline").checked;
+  const lv = $("fLevel").value, online = $("fOnline").checked;
+  const thr = parseFloat($("fThr").value) || 0, par = $("fPar").checked, parMin = parseFloat($("fParMin").value) || 0;
   view = DATA.rows.filter(r => {
     if(m && r.m !== m) return false;
     if(st && (m ? r.s : r.m + " · " + r.s) !== st) return false;
     if(!online && r.s === "Sklep internetowy") return false;
-    if(sig && !r.sg) return false;
+    if(par && !(num(r.p) >= parMin)) return false;
+    if(lv){ const L = level(r, thr);
+      if(lv === "lowzero" && L !== "low" && L !== "zero") return false;
+      if(lv !== "lowzero" && L !== lv) return false; }
     if(t && !((r.n||"")+" "+(r.e||"")+" "+(r.i||"")+" "+(r.s||"")).toLowerCase().includes(t)) return false;
     return true;
   });
-  view.sort((a,b) => (b.sg?1:0)-(a.sg?1:0) || (a.n||"").localeCompare(b.n||"","pl") || (a.s||"").localeCompare(b.s||"","pl"));
+  view.forEach(r => { r._L = level(r, thr); r._m2 = m2Of(r); });
+  const pr = {zero:0, low:1, ok:2};
+  const byName = (a,b) => (a.n||"").localeCompare(b.n||"","pl") || (a.s||"").localeCompare(b.s||"","pl");
+  const sorts = {
+    prio: (a,b) => (pr[a._L] ?? 3) - (pr[b._L] ?? 3) || (num(b.p)||0) - (num(a.p)||0) || byName(a,b),
+    m2asc: (a,b) => (a._m2 ?? a.q ?? 1e9) - (b._m2 ?? b.q ?? 1e9) || byName(a,b),
+    parDesc: (a,b) => (num(b.p)||0) - (num(a.p)||0) || byName(a,b),
+    name: byName,
+    store: (a,b) => (a.m+a.s).localeCompare(b.m+b.s,"pl") || byName(a,b),
+  };
+  view.sort(sorts[$("fSort").value]);
   $("sRows").textContent = view.length.toLocaleString("pl-PL");
   $("sProd").textContent = new Set(view.map(r=>r.e)).size.toLocaleString("pl-PL");
   $("sStores").textContent = new Set(view.map(r=>r.m+r.s)).size.toLocaleString("pl-PL");
-  $("sSig").textContent = view.filter(r=>r.sg).length.toLocaleString("pl-PL");
+  $("sZero").textContent = view.filter(r=>r._L==="zero").length.toLocaleString("pl-PL");
+  $("sLow").textContent = view.filter(r=>r._L==="low").length.toLocaleString("pl-PL");
   render(true);
 }
 function pill(r){
-  if(r.sg){ const red = /^Brak/.test(r.sg); return `<span class="pill ${red?"p-red":"p-amb"}">${esc(r.sg)}</span>`; }
+  if(r._L === "zero") return `<span class="pill p-red">Brak</span>`;
+  if(r._L === "low") return `<span class="pill p-amb">Niski stan</span>`;
+  if(r._L === "ok") return `<span class="pill p-grn">OK</span>`;
   if(r.st === "NIE_ZNALEZIONO") return `<span class="pill p-amb">Brak w ofercie online sieci</span>`;
-  if(typeof r.q === "number" && r.q > 0) return `<span class="pill p-grn">OK</span>`;
+  if(r.q === "Poza asortymentem") return `<span class="pill">Poza asortymentem</span>`;
+  if(r.q === "Dostępny") return `<span class="pill p-grn">Dostępny online</span>`;
+  if(r.q === "Niedostępny") return `<span class="pill p-red">Niedostępny online</span>`;
   return "";
 }
 function render(reset){
@@ -199,8 +280,8 @@ function render(reset){
   $("rows").insertAdjacentHTML("beforeend", part.map(r => `<tr>
     <td>${esc(r.n)}<span class="idx">${esc(r.i)} · EAN ${esc(r.e)}</span></td>
     <td data-l="Sklep">${esc(r.m)}<span class="idx">${esc(r.s)}</span></td>
-    <td class="num" data-l="Stan (opak.)">${esc(fmt(r.q))}</td>
-    <td class="num" data-l="Stan m²">${esc(fmt(r.qm,2))}</td>
+    <td class="num" data-l="Stan (opak.)">${num(r.q)!==null ? esc(fmt(r.q)) : ""}</td>
+    <td class="num" data-l="Stan m²">${r._m2!=null ? esc(fmt(r._m2,2)) : ""}</td>
     <td>${pill(r)}</td>
     <td class="num" data-l="Paradyż">${esc(fmt(r.p))} ${esc(r.j||"")}</td>
     <td class="num" data-l="Cena/m²">${r.c ? esc(fmt(r.c,2))+" zł" : ""}</td>
@@ -208,13 +289,27 @@ function render(reset){
   shown += part.length;
   $("moreBtn").classList.toggle("hidden", shown >= view.length);
 }
+async function encryptUpload(){
+  const f = $("upFile").files[0], msg = $("upMsg");
+  if(!f){ msg.textContent = "Najpierw wybierz plik .xlsx"; return; }
+  const buf = new Uint8Array(await f.arrayBuffer());
+  if(buf[0] !== 0x50 || buf[1] !== 0x4B){ msg.textContent = "To nie wygląda na plik Excel (.xlsx)."; return; }
+  const ITER = 250000, salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(PW), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:ITER, hash:"SHA-256"}, base, {name:"AES-GCM", length:256}, false, ["encrypt"]);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, buf));
+  const enc = a => { let s=""; for(let i=0;i<a.length;i+=8192) s += String.fromCharCode.apply(null, a.subarray(i,i+8192)); return btoa(s); };
+  save(new Blob([JSON.stringify({v:1, iter:ITER, salt:enc(salt), iv:enc(iv), ct:enc(ct)})], {type:"application/octet-stream"}), "input.xlsx.enc");
+  msg.textContent = "Gotowe – pobrano input.xlsx.enc. Teraz wgraj go w GitHub (krok 3).";
+}
 function save(blob, name){
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
   document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 1000);
 }
 function downloadCsv(){
-  const head = ["Sieć","Sklep","EAN","Indeks","Produkt","Stan (opak.)","Stan m2","Sygnał","Stan Paradyż","JM","Cena/m2","Link"];
-  const keys = ["m","s","e","i","n","q","qm","sg","p","j","c","u"];
+  const head = ["Sieć","Sklep","EAN","Indeks","Produkt","Stan (opak.)","Stan m2","Stan","Stan Paradyż","JM","Cena/m2","Link"];
+  const keys = ["m","s","e","i","n","q","_m2","_Lpl","p","j","c","u"];
+  const LPL = {zero:"Brak", low:"Niski", ok:"OK"}; view.forEach(r => r._Lpl = LPL[r._L] || "");
   const q = v => { v = v==null ? "" : String(v); if(typeof v==="string" && /^\d+\.\d+$/.test(v)) v = v.replace(".",","); return /[;"\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
   const lines = [head.join(";")].concat(view.map(r => keys.map(k => q(typeof r[k]==="number" ? String(r[k]).replace(".",",") : r[k])).join(";")));
   save(new Blob(["﻿" + lines.join("\r\n")], {type:"text/csv;charset=utf-8"}), "stany_widok_" + DATA.generated.slice(0,10) + ".csv");

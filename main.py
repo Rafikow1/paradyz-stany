@@ -37,7 +37,7 @@ def parse_args():
     return p.parse_args()
 
 
-def signal(product: dict, r: StockResult, sig: dict) -> str:
+def signal(product: dict, r: StockResult, sig: dict, stock_m2: float | None = None) -> str:
     """Ostrzeżenie dla przedstawiciela: porównanie stanu w sklepie ze stanem Paradyża."""
     if r.status != "OK":
         return ""
@@ -53,7 +53,9 @@ def signal(product: dict, r: StockResult, sig: dict) -> str:
     if isinstance(r.stock, (int, float)):
         if r.stock == 0:
             return f"Brak w sklepie – {ours_txt}" if have else "Brak w sklepie i mało u Paradyża"
-        if r.stock < sig.get("low_store_packs", 5):
+        low = (stock_m2 < sig.get("low_store_m2", 15)) if stock_m2 is not None \
+            else (r.stock < sig.get("low_store_packs", 5))
+        if low:
             return f"Niski stan w sklepie – {ours_txt}" if have else "Niski stan w sklepie"
     return ""
 
@@ -69,7 +71,7 @@ def make_row(product: dict, market_name: str, r: StockResult, sig: dict | None =
         "ID_Sklepu_Fizycznego / Nazwa_Miasta": r.location,
         "Stan_Magazynowy": r.stock,
         "Stan_Sklep_m2": stock_m2,
-        "Sygnal": signal(product, r, sig or {}),
+        "Sygnal": signal(product, r, sig or {}, stock_m2),
         "Stan_Paradyz": product.get("Stan_Paradyz"),
         "JM": product.get("JM"),
         "Data_Stanu_Paradyz": product.get("Data_Stanu_Paradyz"),

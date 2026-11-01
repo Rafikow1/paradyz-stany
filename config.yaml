@@ -24,7 +24,8 @@ general:
 
 # Kiedy program wpisuje ostrzeżenie w kolumnie "Sygnal"
 signals:
-  low_store_packs: 5        # mniej opakowań w sklepie = "niski stan"
+  low_store_m2: 15          # mniej m² w sklepie = "niski stan"
+  low_store_packs: 5        # dla produktów bez przelicznika m² (np. inserta w szt.): mniej opakowań = "niski stan"
   paradyz_min_m2: 100       # Paradyż "ma towar", jeśli stan >= tej wartości
 
 markets:
