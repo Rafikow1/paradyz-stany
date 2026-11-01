@@ -13,6 +13,7 @@ general:
   delay_max: 5.0
   api_delay_min: 0.3        # krótsze opóźnienie dla lekkich zapytań o stany (wewnątrz otwartej strony)
   api_delay_max: 0.8
+  castorama_parallel: 6     # ile sklepów Castoramy pytamy jednocześnie
   page_timeout_ms: 45000
   max_retries: 3            # ile razy ponawiać przy blokadzie / timeoucie
   block_wait_seconds: [60, 300, 900, 1800]  # przerwy po kolejnych blokadach z rzędu (s): 1 min, 5 min, 15 min, 30 min

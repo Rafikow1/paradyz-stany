@@ -24,7 +24,7 @@ concurrency:
 jobs:
   odczyt:
     runs-on: ubuntu-latest
-    timeout-minutes: 340
+    timeout-minutes: 355
     env:
       DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
       PYTHONUNBUFFERED: "1"
@@ -50,7 +50,7 @@ jobs:
 
       - name: Odczyt sklepów
         continue-on-error: true
-        timeout-minutes: 270
+        timeout-minutes: 290
         run: |
           ARGS="--input input.xlsx"
           if [ -n "${{ github.event.inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"; fi
@@ -66,6 +66,7 @@ jobs:
           fi
 
       - name: Publikacja na stronie (zaszyfrowane)
+        if: github.event.inputs.limit == '' || github.event.inputs.limit == null
         run: |
           if [ -f output/stany_magazynowe_AKTUALNE.xlsx ]; then
             python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs

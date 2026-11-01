@@ -128,11 +128,17 @@ class CastoramaScraper(BaseScraper):
             for i in range(0, len(ids), 10):
                 results.update(await self._fulfil(ean, ids[i:i + 10], stores[ids[i]]["pc"]))
         else:
-            for sid in ids:
-                try:
-                    results.update(await self._fulfil(ean, [sid], stores[sid]["pc"]))
-                except ScraperError as e:
-                    results[sid] = (None, f"błąd: {e}")
+            par = self.g.get("castorama_parallel", 6)
+            for i in range(0, len(ids), par):
+                part = ids[i:i + par]
+                urls = [FULFIL_API.format(ean=ean, ids=quote(sid), pc=stores[sid]["pc"]) for sid in part]
+                for sid, data in zip(part, await self.browser_fetch_json_many(urls)):
+                    if not data:
+                        results[sid] = (None, "błąd zapytania")
+                        continue
+                    for row in data.get("data", []):
+                        inst = row.get("attributes", {}).get("inStore", {}) or {}
+                        results[sid] = (inst.get("quantity"), inst.get("availability"))
 
         out = []
         for sid in ids:

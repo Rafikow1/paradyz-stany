@@ -242,6 +242,28 @@ class BaseScraper:
     async def api_delay(self):
         await asyncio.sleep(random.uniform(self.g.get("api_delay_min", 0.6), self.g.get("api_delay_max", 1.5)))
 
+    async def browser_fetch_json_many(self, urls: list[str]) -> list[Any]:
+        """Kilka zapytań naraz z wnętrza przeglądarki (jak strona ładująca kilka rzeczy jednocześnie).
+        Zwraca listę: JSON albo None (błąd danego zapytania)."""
+        await self.api_delay()
+        try:
+            res = await self.page.evaluate(
+                """async (us) => Promise.all(us.map(async u => {
+                    try { const r = await fetch(u, {credentials: 'include', headers: {'Accept': 'application/json'}});
+                          return {status: r.status, body: await r.text()}; }
+                    catch(e) { return {status: 0, body: ''}; } }))""", urls)
+        except PWError as e:
+            raise ScraperError(f"Zapytania nie powiodły się: {str(e)[:120]}") from e
+        if any(r["status"] in (403, 429) for r in res):
+            raise Blocked("Serwer zwrócił 403/429 przy zapytaniach zbiorczych")
+        out = []
+        for r in res:
+            try:
+                out.append(json.loads(r["body"]) if r["status"] == 200 else None)
+            except json.JSONDecodeError:
+                out.append(None)
+        return out
+
     async def browser_fetch_text(self, url: str) -> str:
         """Jak browser_fetch_json, ale zwraca surowy tekst (np. fragment HTML)."""
         await self.api_delay()
@@ -357,6 +379,14 @@ class BaseScraper:
         # zawsze świeża strona główna – żadne otwarte panele nie zasłaniają okienka wyszukiwania
         await self.goto(self.m["base_url"])
         box = self.page.locator(sel).first
+        try:
+            if not await box.is_visible(timeout=8000):
+                # zwykle strona "sprawdzania przeglądarki" – chwila przerwy i ponowne wejście
+                await asyncio.sleep(random.uniform(15, 25))
+                await self.goto(self.m["base_url"])
+                box = self.page.locator(sel).first
+        except (PWTimeout, PWError):
+            pass
         try:
             await box.click(timeout=10000)
             await box.fill("")
