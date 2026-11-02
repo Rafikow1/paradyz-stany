@@ -32,6 +32,7 @@ jobs:
     timeout-minutes: 200
     strategy:
       fail-fast: false
+      max-parallel: 19
       matrix:
         include:
           - { siec: leroy, czesc: "1/6", nr: 1 }
@@ -40,12 +41,18 @@ jobs:
           - { siec: leroy, czesc: "4/6", nr: 4 }
           - { siec: leroy, czesc: "5/6", nr: 5 }
           - { siec: leroy, czesc: "6/6", nr: 6 }
-          - { siec: castorama, czesc: "1/6", nr: 1 }
-          - { siec: castorama, czesc: "2/6", nr: 2 }
-          - { siec: castorama, czesc: "3/6", nr: 3 }
-          - { siec: castorama, czesc: "4/6", nr: 4 }
-          - { siec: castorama, czesc: "5/6", nr: 5 }
-          - { siec: castorama, czesc: "6/6", nr: 6 }
+          - { siec: castorama, czesc: "1/12", nr: 1 }
+          - { siec: castorama, czesc: "2/12", nr: 2 }
+          - { siec: castorama, czesc: "3/12", nr: 3 }
+          - { siec: castorama, czesc: "4/12", nr: 4 }
+          - { siec: castorama, czesc: "5/12", nr: 5 }
+          - { siec: castorama, czesc: "6/12", nr: 6 }
+          - { siec: castorama, czesc: "7/12", nr: 7 }
+          - { siec: castorama, czesc: "8/12", nr: 8 }
+          - { siec: castorama, czesc: "9/12", nr: 9 }
+          - { siec: castorama, czesc: "10/12", nr: 10 }
+          - { siec: castorama, czesc: "11/12", nr: 11 }
+          - { siec: castorama, czesc: "12/12", nr: 12 }
           - { siec: obi, czesc: "1/1", nr: 1 }
     steps:
       - uses: actions/checkout@v4
