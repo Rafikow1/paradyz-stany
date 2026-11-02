@@ -17,6 +17,366 @@
       "url": "https://www.obi.pl/p/6885354/glazura-almagro-wood-29-8x59-8-1-43m2-krt",
       "name": "ALMAGRO WOOD NATURALE ŚCIANA REKT. MAT 29,8X59,8 G1",
       "updated_at": "2026-11-01T21:02:16"
+    },
+    "5900144058736": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6274195/mozaika-ceramiczna-altea-bianco-29-8-cm-x-29-8-cm",
+      "name": "ALTEA BIANCO MOZAIKA PRASOWANA K.2,3X2,3 29,8X29,8 G1",
+      "updated_at": "2026-11-02T02:30:08"
+    },
+    "5900144058743": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6066922/mozaika-ceramiczna-altea-nero-29-8-cm-x-29-8-cm",
+      "name": "ALTEA NERO MOZAIKA PRASOWANA K.2,3X2,3 29,8X29,8 G1",
+      "updated_at": "2026-11-02T02:30:33"
+    },
+    "5902610538803": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:31:19"
+    },
+    "5902610538827": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:10"
+    },
+    "5902610587665": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7214935/plyta-gresowa-tarasowa-2-cm-burlington-silver-59-5-x-59-5-cm",
+      "name": "PŁYTA TARASOWA BURLINGTON SILVER GRES SZKL. REKT. STRUKTURA 20MM MAT. 59,5X59,5 G1",
+      "updated_at": "2026-11-02T02:32:18"
+    },
+    "5902610513107": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:14"
+    },
+    "5900144093447": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6963896/glazura-gamma-matowa-9-8-x-19-8-cm",
+      "name": "GAMMA COLOURS BIAŁA ŚCIANA MAT. 9,8X19,8 G1",
+      "updated_at": "2026-11-02T02:33:21"
+    },
+    "5900144093614": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6963904/glazura-gamma-matowa-9-8-x-29-8-cm",
+      "name": "GAMMA COLOURS BIAŁA ŚCIANA MAT. 9,8X29,8 G1",
+      "updated_at": "2026-11-02T02:33:54"
+    },
+    "5900144093416": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6963870/glazura-gamma-blyszczaca-9-8-x-19-8-cm",
+      "name": "GAMMA COLOURS BIAŁA ŚCIANA POŁYSK 9,8X19,8 G1",
+      "updated_at": "2026-11-02T02:34:35"
+    },
+    "5900144093669": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6963888/glazura-gamma-blyszczaca-9-8-x-29-8-cm",
+      "name": "GAMMA COLOURS BIAŁA ŚCIANA POŁYSK 9,8X29,8 G1",
+      "updated_at": "2026-11-02T02:35:07"
+    },
+    "5904584161391": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:36:26"
+    },
+    "5902610529245": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:37:16"
+    },
+    "5902610529221": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:38:02"
+    },
+    "5902610529269": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:01"
+    },
+    "5902610557736": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7122294/gres-szkliwiony-guarda-59-8-x-59-8-cm",
+      "name": "GUARDA BIANCO GRES SZKL. REKT. MAT. 59,8X59,8 G1",
+      "updated_at": "2026-11-02T02:39:07"
+    },
+    "5902610521805": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6880181/glazura-guarda-bianco-29-8-x-89-8-cm",
+      "name": "GUARDA BIANCO ŚCIANA REKT. POŁYSK 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:39:30"
+    },
+    "5902610521836": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6885370/glazura-guarda-nero-29-8-x-89-8-cm",
+      "name": "GUARDA NERO ŚCIANA REKT. POŁYSK 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:40:03"
+    },
+    "5902610526749": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7248578/glazura-kalbros-white-mat-29-8-x-59-8-cm",
+      "name": "KALBROS WHITE ŚCIANA REKT. MAT. 29,8X59,8 G1",
+      "updated_at": "2026-11-02T02:40:32"
+    },
+    "5902610526763": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7248586/glazura-kalbros-white-gloss-29-8-x-59-8-cm",
+      "name": "KALBROS WHITE ŚCIANA REKT. POŁYSK 29,8X59,8 G1",
+      "updated_at": "2026-11-02T02:41:12"
+    },
+    "5904584158667": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7334352/gres-szkliwiony-koturio-naturale-19-8-x-119-8-cm",
+      "name": "KOTURIO NATURALE GRES SZKL. REKT. STRUKTURA MAT. 19,8X119,8 G1",
+      "updated_at": "2026-11-02T02:41:35"
+    },
+    "5900139030945": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7335714/gres-szkliwiony-lookwood-brown-20-x-60-cm",
+      "name": "LOOKWOOD BROWN GRES SZKL. STRUKTURA MAT. 20X60 G1",
+      "updated_at": "2026-11-02T02:42:09"
+    },
+    "5900139030969": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7335722/gres-szkliwiony-lookwood-naturale-20-x-60-cm",
+      "name": "LOOKWOOD NATURALE GRES SZKL. STRUKTURA MAT. 20X60 G1",
+      "updated_at": "2026-11-02T02:42:41"
+    },
+    "5904584100338": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7415482/gres-szkliwiony-timmi-beige-59-8-x-59-8-cm",
+      "name": "TIMMI BEIGE GRES SZKL. REKT. MAT. 59,8X59,8 G1",
+      "updated_at": "2026-11-02T02:43:14"
+    },
+    "5904584158186": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7334337/gres-szkliwiony-meverino-light-beige-59-8-x-119-8-cm",
+      "name": "MEVERINO LIGHT BEIGE GRES SZKL. REKT. MAT. 59,8X119,8 G1",
+      "updated_at": "2026-11-02T02:43:55"
+    },
+    "5904584158223": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7334345/gres-szkliwiony-meverino-light-grey-59-8-x-119-8-cm",
+      "name": "MEVERINO LIGHT GREY GRES SZKL. REKT. MAT. 59,8X119,8 G1",
+      "updated_at": "2026-11-02T02:44:27"
+    },
+    "5904584100390": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7415474/gres-szkliwiony-timmi-grey-59-8-x-59-8-cm",
+      "name": "TIMMI GREY GRES SZKL. REKT. MAT. 59,8X59,8 G1",
+      "updated_at": "2026-11-02T02:44:51"
+    },
+    "5902610521638": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6880165/glazura-pioz-bianco-30x60-cm",
+      "name": "PIOZ BIANCO ŚCIANA MAT 30X60 G1",
+      "updated_at": "2026-11-02T02:45:23"
+    },
+    "5902610521669": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6880173/glazura-pioz-wood-struktura-30x60-cm",
+      "name": "PIOZ WOOD ŚCIANA STRUKTURA MAT 30X60 G1",
+      "updated_at": "2026-11-02T02:45:47"
+    },
+    "5904584100215": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7129695/gres-szkliwiony-rock-grys-60-x-60-cm",
+      "name": "POLSON GREY GRES SZKL. MAT. 60X60 G1",
+      "updated_at": "2026-11-02T02:46:25"
+    },
+    "5904584100253": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7129703/dekor-rock-grys-60-x-60-cm",
+      "name": "POLSON GREY DEKOR GRES SZKL. MAT. 60X60 G1",
+      "updated_at": "2026-11-02T02:46:58"
+    },
+    "5904584153891": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:15"
+    },
+    "5900139032284": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6977698/plytka-podlogowa-rockstar-grafit-30-x-30-cm",
+      "name": "ROCKSTAR GRAFIT PODŁOGA 30X30 G1",
+      "updated_at": "2026-11-02T02:48:30"
+    },
+    "5900139032307": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6977714/stopnica-rockstar-grafit-30-cm-x-30-cm",
+      "name": "ROCKSTAR GRAFIT STOPNICA PROSTA 30X30 G1",
+      "updated_at": "2026-11-02T02:49:02"
+    },
+    "5900139032246": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6977680/plytka-podlogowa-rockstar-grys-30-x-30-cm",
+      "name": "ROCKSTAR GRYS PODŁOGA 30X30 G1",
+      "updated_at": "2026-11-02T02:49:35"
+    },
+    "5900139032260": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6977706/stopnica-rockstar-grys-30-cm-x-30-cm",
+      "name": "ROCKSTAR GRYS STOPNICA PROSTA 30X30 G1",
+      "updated_at": "2026-11-02T02:50:14"
+    },
+    "5900139030785": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7261290/gres-szkliwiony-rokton-beige-30-x-30-cm",
+      "name": "ROKTON BEIGE PODŁOGA STRUKTURA MAT 30X30 G1",
+      "updated_at": "2026-11-02T02:50:54"
+    },
+    "5900139030808": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7261316/stopnica-rokton-beige-30-x-30-cm",
+      "name": "ROKTON BEIGE STOPNICA PROSTA STRUKTURA MAT 30X30 G1",
+      "updated_at": "2026-11-02T02:51:25"
+    },
+    "5900139030822": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7261308/gres-szkliwiony-rokton-grey-30-x-30-cm",
+      "name": "ROKTON GREY PODŁOGA STRUKTURA MAT 30X30 G1",
+      "updated_at": "2026-11-02T02:51:54"
+    },
+    "5900139030846": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7261324/stopnica-rokton-grey-30-x-30-cm",
+      "name": "ROKTON GREY STOPNICA PROSTA STRUKTURA MAT 30X30 G1",
+      "updated_at": "2026-11-02T02:52:15"
+    },
+    "5904584162633": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7388846/gres-szkliwiony-royal-white-gold-59-8-x-119-8-cm",
+      "name": "ROYAL WHITE GOLD GRES SZKL. REKT. MAT. 59,8X119,8 G1",
+      "updated_at": "2026-11-02T02:52:46"
+    },
+    "5902610588143": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:54:11"
+    },
+    "5900139010343": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:54:53"
+    },
+    "5900139010213": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7214893/plyta-gresowa-tarasowa-2-cm-salado-antracyt-59-5-x-59-5-cm",
+      "name": "PŁYTA TARAS SALADO ANTRACITE STR GRES SZKL REKT 20MM MAT 59,5X59,5 G1",
+      "updated_at": "2026-11-02T02:55:08"
+    },
+    "5900139010367": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:56:12"
+    },
+    "5900139010244": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7214877/plyta-gresowa-tarasowa-2-cm-salado-grys-59-5-x-59-5-cm",
+      "name": "PŁYTA TARASOWA SALADO GRYS STR. GRES SZKL. REKT. 20MM MAT 59,5X59,5 G1",
+      "updated_at": "2026-11-02T02:56:18"
+    },
+    "5902610560408": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7318942/gres-techniczny-salti-beige-impregnowany-30-x-30-cm",
+      "name": "SALTI BEIGE GRES IMPREGNOWANY SÓL-PIEPRZ MAT 6,5 MM 30X30 G1",
+      "updated_at": "2026-11-02T02:56:48"
+    },
+    "5902610560422": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7318959/stopnica-salti-beige-impregnowana-30-x-30-cm",
+      "name": "SALTI BEIGE STOPNICA PROSTA GRES IMPREG. SÓL-PIEPRZ 6,5 MM 30X30 G1",
+      "updated_at": "2026-11-02T02:57:22"
+    },
+    "5902610560446": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7318967/gres-techniczny-salti-grey-impregnowany-30-x-30-cm",
+      "name": "SALTI GREY GRES IMPREGNOWANY SÓL-PIEPRZ MAT 6,5 MM 30X30 G1",
+      "updated_at": "2026-11-02T02:58:05"
+    },
+    "5902610560460": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7318975/stopnica-salti-grey-impregnowana-30-x-30-cm",
+      "name": "SALTI GREY STOPNICA PROSTA GRES IMPREG. SÓL-PIEPRZ 6,5 MM 30X30 G1",
+      "updated_at": "2026-11-02T02:58:35"
+    },
+    "5904584162060": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7356850/gres-szkliwiony-tambre-beige-59-8-x-59-8-cm",
+      "name": "TAMBRE BEIGE GRES SZKL. REKT. MAT. 59,8X59,8 G1",
+      "updated_at": "2026-11-02T02:59:05"
+    },
+    "5904584159329": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7168719/gres-szkliwiony-tambre-grey-59-8-x-59-8-cm",
+      "name": "TAMBRE GREY GRES SZKL. REKT. MAT. 59,8X59,8 G1",
+      "updated_at": "2026-11-02T02:59:28"
+    },
+    "5904584159305": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7168701/gres-szkliwiony-tambre-light-grey-59-8-x-59-8-cm",
+      "name": "TAMBRE LIGHT GREY GRES SZKL. REKT. MAT. 59,8X59,8 G1",
+      "updated_at": "2026-11-02T03:00:01"
+    },
+    "5900144054158": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/6039002/glazura-tamoe-bianco-9-8-x-19-8-cm",
+      "name": "TAMOE BIANCO ŚCIANA KAFEL 9,8X19,8 G1",
+      "updated_at": "2026-11-02T03:00:25"
+    },
+    "5900144054196": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T03:01:34"
+    },
+    "5900139032703": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7272974/gres-szkliwiony-taruswood-beige-30-x-60-cm",
+      "name": "TARUSWOOD BEIGE STRUKTURA PODŁOGA 30X60 G1",
+      "updated_at": "2026-11-02T03:01:42"
+    },
+    "5900139032680": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7272966/gres-szkliwiony-taruswood-brown-30-x-60-cm",
+      "name": "TARUSWOOD BROWN STRUKTURA PODŁOGA 30X60 G1",
+      "updated_at": "2026-11-02T03:02:14"
+    },
+    "5904584100147": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7567563/gres-szkiwiony-polerowany-beige-u123-60-x-60-cm",
+      "name": "U123 BEIGE POLER 60,0x60,0",
+      "updated_at": "2026-11-02T03:02:38"
+    },
+    "5904584100154": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7567571/gres-szkiwiony-polerowany-beige-u123-60-x-120-cm",
+      "name": "U123 BEIGE POLER 60,0x120,0",
+      "updated_at": "2026-11-02T03:03:01"
+    },
+    "5902610558757": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7461528/gres-szkliwiony-polerowany-u125-graphite-119-8-x-119-8-cm",
+      "name": "U125 GRAPHITE GRES SZKL. REKT. POLER 119,8X119,8 G1",
+      "updated_at": "2026-11-02T03:03:42"
+    },
+    "5902610558733": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7461502/gres-szkliwiony-u129-grey-119-8-x-119-8-cm",
+      "name": "U129 GREY GRES SZKL. REKT. MAT. 119,8X119,8 G1",
+      "updated_at": "2026-11-02T03:04:13"
+    },
+    "5904584160028": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7198872/gres-szkliwiony-woodline-beige-19-8-x-119-8-cm",
+      "name": "WOODLINE BEIGE GRES SZKL. REKT. STRUKTURA MAT. 19,8X119,8 G1",
+      "updated_at": "2026-11-02T03:04:44"
+    },
+    "5904584160042": {
+      "status": "FOUND",
+      "url": "https://www.obi.pl/p/7198880/gres-szkliwiony-woodline-dark-beige-19-8-x-119-8-cm",
+      "name": "WOODLINE DARK BEIGE GRES SZKL. REKT. STRUKTURA MAT. 19,8X119,8 G1",
+      "updated_at": "2026-11-02T03:05:15"
     }
   },
   "castorama": {
@@ -42,6 +402,521 @@
       "status": "NOT_FOUND",
       "url": "",
       "updated_at": "2026-11-01T21:16:49"
+    },
+    "5900139038088": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-mrozoodporny-castelis-paradyz-59-8-x-119-8-cm-beige-1-43-m2/5900139038088_CAPL.prd#search_term_redirect=5900139038088",
+      "name": "CASTELIS BEIGE GRES SZKL. REKT. MAT. 59,8X119,8 G1",
+      "updated_at": "2026-11-02T02:31:16"
+    },
+    "5900139038101": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:31:38"
+    },
+    "5900144080966": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:31:44"
+    },
+    "5904584156410": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:31:51"
+    },
+    "5904584155901": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:31:57"
+    },
+    "5900144080959": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:04"
+    },
+    "5904584156380": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:10"
+    },
+    "5904584155871": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:17"
+    },
+    "5902610531033": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:24"
+    },
+    "5063022638847": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:30"
+    },
+    "5063022639097": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:36"
+    },
+    "5063022639073": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:43"
+    },
+    "5063022639059": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:50"
+    },
+    "5063022639486": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:32:57"
+    },
+    "5900139038415": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:01"
+    },
+    "5904584153440": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:09"
+    },
+    "5902610511493": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:14"
+    },
+    "5902610511523": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:19"
+    },
+    "5900139033069": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:24"
+    },
+    "5900139033045": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:32"
+    },
+    "5900139033083": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:39"
+    },
+    "5900139033106": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:44"
+    },
+    "5904584153471": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:50"
+    },
+    "5900139008876": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:33:56"
+    },
+    "5900139008890": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:01"
+    },
+    "5902610513978": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:08"
+    },
+    "5900144007772": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:14"
+    },
+    "5900144007796": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:20"
+    },
+    "5900144007826": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:26"
+    },
+    "5902610514005": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:33"
+    },
+    "5902610514036": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:40"
+    },
+    "5900139008913": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:46"
+    },
+    "5900139008562": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:34:53"
+    },
+    "5904584187056": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:35:00"
+    },
+    "5904584184895": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:35:06"
+    },
+    "5900144047532": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:35:38"
+    },
+    "5900144047549": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:36:12"
+    },
+    "5900144047556": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:36:43"
+    },
+    "5902610517945": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/glazura-magnolia-paradyz-25-x-75-cm-grys-1-3-m2/5902610517945_CAPL.prd#search_term_redirect=5902610517945",
+      "name": "MAGNOLIA GRYS ŚCIANA REKT. 25X75 G1",
+      "updated_at": "2026-11-02T02:36:51"
+    },
+    "5063022655943": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-maldo-opp-60-x-60-cm-anthracite-1-44-m2/5063022655943_CAPL.prd#search_term_redirect=5063022655943",
+      "name": "MALDO ANTHRACITE GRES SZKL. MAT. 60X60 G1",
+      "updated_at": "2026-11-02T02:37:32"
+    },
+    "5063022655103": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-maldo-opp-60-x-60-cm-light-grey-1-44-m2/5063022655103_CAPL.prd#search_term_redirect=5063022655103",
+      "name": "MALDO LIGHT GREY GRES SZKL. MAT. 60X60 G1",
+      "updated_at": "2026-11-02T02:38:17"
+    },
+    "5900139038231": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-mrozoodporny-marbis-paradyz-59-8-x-119-8-cm-beige-1-43-m2/5900139038231_CAPL.prd#search_term_redirect=5900139038231",
+      "name": "MARBIS BEIGE GRES SZKL. REKT. MAT. 59,8X119,8 G1",
+      "updated_at": "2026-11-02T02:38:57"
+    },
+    "5900139038149": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:22"
+    },
+    "5063022581150": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:27"
+    },
+    "5063022581648": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:34"
+    },
+    "5063022581631": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:41"
+    },
+    "5063022581686": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:48"
+    },
+    "5063022581570": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:39:54"
+    },
+    "5063022581402": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:01"
+    },
+    "5063022581341": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:06"
+    },
+    "5063022581549": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:13"
+    },
+    "5900139030426": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:18"
+    },
+    "5900139032406": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:24"
+    },
+    "5900139030464": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:31"
+    },
+    "5900139032420": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:37"
+    },
+    "5900139030440": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:43"
+    },
+    "5900139032444": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:49"
+    },
+    "5900139030488": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:40:54"
+    },
+    "5900139032468": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:00"
+    },
+    "5904584158582": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:06"
+    },
+    "5902610594946": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:13"
+    },
+    "5902610522857": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:20"
+    },
+    "5902610528293": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:28"
+    },
+    "5902610512834": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:33"
+    },
+    "5902610528330": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:39"
+    },
+    "5902610522703": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:45"
+    },
+    "5902610528316": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:50"
+    },
+    "5904584158285": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:41:58"
+    },
+    "5904584158162": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:42:03"
+    },
+    "5904584158087": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:42:11"
+    },
+    "5900139009200": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:42:18"
+    },
+    "5063022654779": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:42:23"
+    },
+    "5063022656155": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:42:28"
+    },
+    "5900139005592": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:42:33"
+    },
+    "5063022581655": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-rava-goodhome-30-x-30-cm-brown-1-35-m2/5063022581655_CAPL.prd#search_term_redirect=5063022581655",
+      "name": "RAVA BROWN PODŁOGA 30X30 G1",
+      "updated_at": "2026-11-02T02:42:43"
+    },
+    "5063022581228": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:43:46"
+    },
+    "5063022581426": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-rava-goodhome-30-x-30-cm-grafit-1-35-m2/5063022581426_CAPL.prd#search_term_redirect=5063022581426",
+      "name": "RAVA GRAFIT PODŁOGA 30X30 G1",
+      "updated_at": "2026-11-02T02:43:55"
+    },
+    "5063022581242": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:44:58"
+    },
+    "5063022581211": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-rava-goodhome-30-x-30-cm-grey-1-35-m2/5063022581211_CAPL.prd#search_term_redirect=5063022581211",
+      "name": "RAVA GRYS PODŁOGA 30X30 G1",
+      "updated_at": "2026-11-02T02:45:06"
+    },
+    "5063022581198": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:46:10"
+    },
+    "5904584158629": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-mrozoodporny-szkliwiony-savio-19-8-x-119-8-cm-1-19-m2/5904584158629_CAPL.prd#search_term_redirect=5904584158629",
+      "name": "SAVIO LIGHT BEIGE GRES SZKL. REKT. STRUKTURA MAT. 19,8X119,8 G1",
+      "updated_at": "2026-11-02T02:46:17"
+    },
+    "5902610514067": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:46:53"
+    },
+    "5902610514098": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:46:58"
+    },
+    "5063022581204": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:03"
+    },
+    "5063022581563": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:09"
+    },
+    "5063022581389": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:16"
+    },
+    "5904584156298": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:22"
+    },
+    "5063022711861": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:28"
+    },
+    "5063022711892": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:35"
+    },
+    "5063022711878": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:42"
+    },
+    "5063022711939": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:49"
+    },
+    "5063022711915": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:47:55"
+    },
+    "5036581057596": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:02"
+    },
+    "5063022711885": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:08"
+    },
+    "5902610530975": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:15"
+    },
+    "5902610531019": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:20"
+    },
+    "5902610530999": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:26"
+    },
+    "5904584162671": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:33"
+    },
+    "5904584162657": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:39"
+    },
+    "5900139037807": {
+      "status": "NOT_FOUND",
+      "url": "",
+      "updated_at": "2026-11-02T02:48:44"
+    },
+    "5900139037760": {
+      "status": "FOUND",
+      "url": "https://www.castorama.pl/gres-woodic-paradyz-20-x-60-cm-naturale-1-32-m2/5900139037760_CAPL.prd#search_term_redirect=5900139037760",
+      "name": "WOODIC NATURALE GRES SZKL. STRUKTURA MAT. 20X60 G1",
+      "updated_at": "2026-11-02T02:49:00"
     }
   },
   "leroy": {
@@ -62,6 +937,60 @@
       "url": "https://www.leroymerlin.pl/produkty/glazura-alphaville-bianco-30x60-ceramika-paradyz-85019050.html",
       "name": "ALPHAVILLE BIANCO ŚCIANA POŁYSK 30X60 G1",
       "updated_at": "2026-11-01T21:11:23"
+    },
+    "3276007612851": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-bloom-plain-29-8x89-8-artens-86790000.html",
+      "name": "ARCTIC BLOOM DEKOR ŚCIANA REKT. MAT 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:32:06"
+    },
+    "3276007824278": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-niebieska-mat-29-8x59-8-artens-91519133.html",
+      "name": "ARCTIC BLUE ŚCIANA REKT. MAT 29,8X59,8 G1",
+      "updated_at": "2026-11-02T02:32:48"
+    },
+    "3276007824360": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-niebieska-mat-29-8x89-8-artens-91519146.html",
+      "name": "ARCTIC BLUE ŚCIANA REKT. MAT 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:33:28"
+    },
+    "3276007824254": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-botanic-mat-29-8x59-8-artens-91519129.html",
+      "name": "ARCTIC BOTANIC ŚCIANA REKT. MAT 29,8X59,8 G1",
+      "updated_at": "2026-11-02T02:34:08"
+    },
+    "3276007824339": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-botanic-mat-zielona-29-8x89-9-artens-91519142.html",
+      "name": "ARCTIC BOTANIC ŚCIANA REKT. MAT 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:34:49"
+    },
+    "3276007919011": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-leave-zielona-29-8x89-8-artens-93106663.html",
+      "name": "ARCTIC GREEN LEAVES DECOR 2D 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:35:28"
+    },
+    "3276007919035": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-sage-flora-seledynowa-29-8x59-8-artens-93106665.html",
+      "name": "ARCTIC SAGE FLORAL DECOR 2D 29,8X59,8 G1",
+      "updated_at": "2026-11-02T02:36:09"
+    },
+    "3276007824308": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-sage-mat-jasnozielona-29-8x59-8-artens-91519138.html",
+      "name": "ARCTIC SAGE ŚCIANA REKT. MAT 29,8X59,8 G1",
+      "updated_at": "2026-11-02T02:36:49"
+    },
+    "3276007824315": {
+      "status": "FOUND",
+      "url": "https://www.leroymerlin.pl/produkty/glazura-arctic-sage-mat-jasnozielona-29-8x89-8-artens-91519140.html",
+      "name": "ARCTIC SAGE ŚCIANA REKT. MAT 29,8X89,8 G1",
+      "updated_at": "2026-11-02T02:37:29"
     }
   }
 }
