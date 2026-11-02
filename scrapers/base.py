@@ -64,12 +64,12 @@ class StockResult:
     location: str                 # "Sklep internetowy" albo "ID / Miasto"
     stock: Any = None             # liczba opakowań lub "Dostępny"/"Niedostępny"/"Brak danych"
     price: float | None = None    # cena za opakowanie (jak w danych sklepu)
-    price_m2: float | None = None
-    m2_per_pack: float | None = None
     url: str = ""
     status: str = "OK"
     note: str = ""
     read_at: str = field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M"))
+    price_m2: float | None = None
+    m2_per_pack: float | None = None
 
 
 @dataclass
@@ -207,7 +207,7 @@ class BaseScraper:
                     await asyncio.sleep(wait)
                     if not await self._is_blocked(0) and attempt == 0 and self._blocks == 1:
                         # pierwsze "sprawdzenie przeglądarki" zwykle mija samo – próbujemy dalej na tej stronie
-                        self._blocks = 0
+                        # (licznik NIE jest zerowany – kolejna blokada da już dłuższą przerwę)
                         return 200
                     continue
                 self._blocks = 0
@@ -403,7 +403,23 @@ class BaseScraper:
         if await self._is_blocked(0):
             raise Blocked("Blokada po wyszukaniu")
 
+    async def direct_url(self, ean: str) -> str | None:
+        """Adres karty produktu zbudowany wprost z EAN (jeśli sieć to umożliwia)."""
+        return None
+
     async def search(self, ean: str) -> str | None:
+        direct = await self.direct_url(ean)
+        if direct:
+            try:
+                await self.goto(direct)
+                info = await self.read_product()
+                if info.raw_jsonld and (info.gtin == ean or await self.page_contains_ean(ean)):
+                    return self.page.url.split("#")[0]
+            except ScraperError:
+                pass
+        return await self._search(ean)
+
+    async def _search(self, ean: str) -> str | None:
         if self.m.get("search_input_selector"):
             await self._type_search(ean)
         else:
@@ -420,6 +436,9 @@ class BaseScraper:
         # 2) lista wyników – sprawdzamy maks. 3 kandydatów, weryfikując EAN na karcie
         candidates = await self._collect_candidates()
         if not candidates:
+            self._nf = getattr(self, "_nf", 0) + 1
+            if self._nf <= 3:
+                await self.debug_dump(f"{ean}_brak_wynikow")
             return None
         for url in candidates[:3]:
             await self.goto(url)

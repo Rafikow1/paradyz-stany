@@ -2,7 +2,7 @@ name: Nocny odczyt stanów
 
 on:
   schedule:
-    - cron: "17 23 * * *"        # codziennie ok. 00:17 czasu polskiego (zimą), 01:17 latem
+    - cron: "7 21 * * *"         # ok. 22:07 czasu polskiego zimą (GitHub potrafi startować z opóźnieniem)
   workflow_dispatch:
     inputs:
       limit:
@@ -21,79 +21,97 @@ concurrency:
   group: nocny-odczyt
   cancel-in-progress: false
 
+env:
+  DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
+  PYTHONUNBUFFERED: "1"
+
 jobs:
   odczyt:
+    name: Odczyt ${{ matrix.siec }}
     runs-on: ubuntu-latest
-    timeout-minutes: 355
-    env:
-      DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
-      PYTHONUNBUFFERED: "1"
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        siec: [leroy, castorama, obi]
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
           cache: pip
-
       - name: Instalacja
         run: |
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
-
-      - name: Odszyfrowanie listy produktów
+      - name: Przygotowanie
+        id: prep
         run: |
+          WANT="${{ github.event.inputs.rynki }}"
+          if [ -n "$WANT" ] && ! echo " $WANT " | grep -q " ${{ matrix.siec }} "; then echo "skip=1" >> $GITHUB_OUTPUT; exit 0; fi
           python -m utils.publish decrypt dane/input.xlsx.enc input.xlsx
           mkdir -p data
           cp dane/url_map.json data/url_map.json 2>/dev/null || true
           cp dane/lm_wspolrzedne_miast.json data/lm_wspolrzedne_miast.json 2>/dev/null || true
-
       - name: Odczyt sklepów
+        if: steps.prep.outputs.skip != '1'
         continue-on-error: true
         timeout-minutes: 290
         run: |
-          ARGS="--input input.xlsx"
+          ARGS="--input input.xlsx --rynki ${{ matrix.siec }} --limit-czasu 270"
           if [ -n "${{ github.event.inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"; fi
-          if [ -n "${{ github.event.inputs.rynki }}" ]; then ARGS="$ARGS --rynki ${{ github.event.inputs.rynki }}"; fi
           xvfb-run -a python main.py $ARGS
-
-      - name: Dokończenie nieudanych (po blokadach)
+      - name: Dokończenie nieudanych
+        if: steps.prep.outputs.skip != '1'
         continue-on-error: true
-        timeout-minutes: 45
+        timeout-minutes: 50
         run: |
           if ls output/stany_magazynowe_2*.xlsx >/dev/null 2>&1; then
-            xvfb-run -a python main.py --input input.xlsx --dokoncz
+            xvfb-run -a python main.py --input input.xlsx --rynki ${{ matrix.siec }} --dokoncz --limit-czasu 40
           fi
-
-      - name: Publikacja na stronie (zaszyfrowane)
-        if: github.event.inputs.limit == '' || github.event.inputs.limit == null
+      - name: Wyniki (zaszyfrowane)
+        if: always() && steps.prep.outputs.skip != '1'
         run: |
-          if [ -f output/stany_magazynowe_AKTUALNE.xlsx ]; then
-            python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs
-          else
-            echo "Brak raportu – strona bez zmian"; exit 1
-          fi
-
-      - name: Dziennik (zaszyfrowany) do pobrania
-        if: always()
-        run: |
-          mkdir -p wyniki && zip -qr wyniki/dziennik.zip logs data/debug 2>/dev/null || true
-          if [ -f wyniki/dziennik.zip ]; then python -m utils.publish encrypt wyniki/dziennik.zip wyniki/dziennik.zip.enc; rm wyniki/dziennik.zip; fi
-
+          mkdir -p wynik
+          for f in output/stany_magazynowe_2*.xlsx; do [ -f "$f" ] && python -m utils.publish encrypt "$f" "wynik/$(basename $f).enc"; done
+          cp data/url_map.json wynik/url_map.json 2>/dev/null || true
+          cp data/lm_wspolrzedne_miast.json wynik/lm_wspolrzedne_miast.json 2>/dev/null || true
+          zip -qr dziennik.zip logs data/debug 2>/dev/null && python -m utils.publish encrypt dziennik.zip wynik/dziennik.zip.enc || true
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: always() && steps.prep.outputs.skip != '1'
         with:
-          name: dziennik-zaszyfrowany
-          path: wyniki/
+          name: wynik-${{ matrix.siec }}
+          path: wynik/
           retention-days: 14
 
-      - name: Zapis do repozytorium
-        if: always()
+  publikacja:
+    needs: odczyt
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          path: wyniki
+      - name: Odszyfrowanie i scalenie
         run: |
-          cp data/url_map.json dane/url_map.json 2>/dev/null || true
-          cp data/lm_wspolrzedne_miast.json dane/lm_wspolrzedne_miast.json 2>/dev/null || true
+          for f in $(find wyniki -name "stany_magazynowe_2*.xlsx.enc"); do python -m utils.publish decrypt "$f" "${f%.enc}"; done
+          python -m utils.merge wyniki output
+          LM=$(find wyniki -name lm_wspolrzedne_miast.json | head -1); [ -n "$LM" ] && cp "$LM" dane/lm_wspolrzedne_miast.json || true
+          cp data/url_map.json dane/url_map.json
+      - name: Publikacja na stronie
+        if: github.event.inputs.limit == '' || github.event.inputs.limit == null
+        run: python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs
+      - name: Zapis do repozytorium
+        run: |
           git config user.name "nocny-odczyt"
           git config user.email "actions@users.noreply.github.com"
           git add docs dane/url_map.json dane/lm_wspolrzedne_miast.json 2>/dev/null || git add docs
           git diff --cached --quiet || git commit -m "Odczyt $(date +'%Y-%m-%d %H:%M')"
-          git push
+          git pull --rebase -q origin main && git push

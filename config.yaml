@@ -43,6 +43,7 @@ markets:
       - "article a[href$='.html']"
     product_id_regex: "-(\\d{8})\\.html"    # numer artykułu LM w URL, np. ...-85019050.html
     # stan sklepu pokazany na karcie produktu, np. "13 na stanie w sklepie Gdańsk Oliwa" (opakowania)
+    product_pause: [40, 80]           # LM blokuje przy szybkim tempie – przerwa między produktami (s)
     home_city: "Gdańsk"               # sklep wybierany przy pierwszym uruchomieniu
     # miasta wpisywane w panelu "Sklepy w pobliżu" – razem pokrywają całą Polskę.
     # Mniej miast = szybciej, ale mniej sklepów w raporcie.

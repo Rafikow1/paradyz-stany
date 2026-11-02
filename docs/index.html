@@ -279,7 +279,7 @@ function render(reset){
   const part = view.slice(shown, shown + PAGE);
   $("rows").insertAdjacentHTML("beforeend", part.map(r => `<tr>
     <td>${esc(r.n)}<span class="idx">${esc(r.i)} · EAN ${esc(r.e)}</span></td>
-    <td data-l="Sklep">${esc(r.m)}<span class="idx">${esc(r.s)}</span></td>
+    <td data-l="Sklep">${esc(r.m)}<span class="idx">${esc(r.s)}</span>${r.d && String(r.d).slice(0,10) !== DATA.generated.slice(0,10) ? `<span class="idx" style="color:var(--amber)">stan z ${esc(String(r.d).slice(0,10))}</span>` : ""}</td>
     <td class="num" data-l="Stan (opak.)">${num(r.q)!==null ? esc(fmt(r.q)) : ""}</td>
     <td class="num" data-l="Stan m²">${r._m2!=null ? esc(fmt(r._m2,2)) : ""}</td>
     <td>${pill(r)}</td>

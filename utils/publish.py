@@ -53,7 +53,7 @@ def _password() -> str:
 SITE_COLS = [
     ("Market", "m"), ("ID_Sklepu_Fizycznego / Nazwa_Miasta", "s"), ("EAN", "e"), ("Indeks_Producenta", "i"),
     ("Nazwa_Produktu", "n"), ("Stan_Magazynowy", "q"), ("Stan_Sklep_m2", "qm"), ("Sygnal", "sg"),
-    ("Stan_Paradyz", "p"), ("JM", "j"), ("Data_Stanu_Paradyz", "dp"), ("m2_w_opakowaniu", "pk"), ("Cena_za_m2", "c"), ("Link_Do_Oferty", "u"), ("Status", "st"),
+    ("Stan_Paradyz", "p"), ("JM", "j"), ("Data_Stanu_Paradyz", "dp"), ("m2_w_opakowaniu", "pk"), ("Cena_za_m2", "c"), ("Link_Do_Oferty", "u"), ("Status", "st"), ("Data_Odczytu", "d"),
 ]
 
 

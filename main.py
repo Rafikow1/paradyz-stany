@@ -11,6 +11,8 @@ from __future__ import annotations
 import argparse
 import asyncio
 import sys
+import random
+import time
 from datetime import date
 
 from scrapers import SCRAPERS
@@ -31,6 +33,8 @@ def parse_args():
     p.add_argument("--limit", type=int, default=0, help="maks. liczba produktów na sieć (test)")
     p.add_argument("--snoop", action="store_true", help="zapisuj odpowiedzi XHR/Fetch do data/snoop/")
     p.add_argument("--headless", action="store_true", help="ukryj okno przeglądarki")
+    p.add_argument("--limit-czasu", type=int, default=0,
+                   help="po ilu minutach przestać zaczynać nowe produkty (zapisuje to, co zdążył)")
     p.add_argument("--dokoncz", action="store_true",
                    help="ponów tylko produkty, które w ostatnim raporcie się nie udały, i scal wyniki")
     p.add_argument("--pakuj", action="store_true", help="spakuj raport + dzienniki do wyniki_do_wyslania.zip")
@@ -86,6 +90,17 @@ def make_row(product: dict, market_name: str, r: StockResult, sig: dict | None =
     }
 
 
+DEADLINE: float | None = None
+
+
+def checkpoint(rows: list[dict], cfg: dict, log):
+    """Zapis częściowego raportu – nagłe przerwanie nie kasuje kilku godzin pracy."""
+    try:
+        write_report(list(rows), cfg["general"].get("output_dir", "output"), date.today())
+    except Exception as e:
+        log.warning("Zapis częściowy nie powiódł się: %s", e)
+
+
 async def run_market(key: str, products: list[dict], cfg: dict, cache: UrlCache, args, rows: list[dict], log):
     mcfg = cfg["markets"][key]
     sig = cfg.get("signals", {})
@@ -95,6 +110,17 @@ async def run_market(key: str, products: list[dict], cfg: dict, cache: UrlCache,
         async with SCRAPERS[key](cfg["general"], mcfg, cache) as scraper:
             for i, product in enumerate(products, 1):
                 ean = product["EAN"]
+                if DEADLINE and time.monotonic() > DEADLINE:
+                    for rest in products[i - 1:]:
+                        rows.append(make_row(rest, name, StockResult("—", status="NIE_SPRAWDZONO",
+                                                                     note="zabrakło czasu – sprawdzony zostanie później")))
+                    scraper.log.warning("Koniec czasu – pominięto %d produktów", len(products) - i + 1)
+                    break
+                if i % 20 == 0:
+                    checkpoint(rows, cfg, log)
+                pause = mcfg.get("product_pause")
+                if pause and i > 1:
+                    await asyncio.sleep(random.uniform(*pause))
                 try:
                     if args.tylko_discovery:
                         url = await scraper.discover(product, force=args.od_nowa)
@@ -116,6 +142,9 @@ async def run_market(key: str, products: list[dict], cfg: dict, cache: UrlCache,
 
 
 async def main_async(args, log):
+    global DEADLINE
+    if args.limit_czasu:
+        DEADLINE = time.monotonic() + args.limit_czasu * 60
     cfg = load_config(args.config)
     if args.snoop:
         cfg["general"]["snoop"] = True
@@ -133,6 +162,12 @@ async def main_async(args, log):
         for k in targets:
             if k in queues and not any(x["EAN"] == p["EAN"] for x in queues[k]):
                 queues[k].append(p)
+    # codzienne przesunięcie kolejki – przy braku czasu nie pomijamy zawsze tych samych produktów
+    if not args.limit:
+        for k, q in queues.items():
+            if q:
+                off = (date.today().toordinal() * 37) % len(q)
+                queues[k] = q[off:] + q[:off]
     if args.limit:
         queues = {k: v[: args.limit] for k, v in queues.items()}
 
@@ -161,7 +196,7 @@ async def main_async(args, log):
             pack_for_claude(path, log)
 
 
-FAILED = {"ZABLOKOWANY", "ZMIANA_UKŁADU_STRONY", "BŁĄD", "BŁĄD_SIECI"}
+FAILED = {"ZABLOKOWANY", "ZMIANA_UKŁADU_STRONY", "BŁĄD", "BŁĄD_SIECI", "NIE_SPRAWDZONO"}
 
 
 def load_failed(cfg) -> tuple[list[dict], set]:

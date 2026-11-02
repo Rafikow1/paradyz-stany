@@ -33,6 +33,10 @@ class CastoramaScraper(BaseScraper):
     _store_headers: dict | None = None
     _multi: bool | None = None
 
+    async def direct_url(self, ean: str) -> str | None:
+        # karty Castoramy kończą się na /{EAN}_CAPL.prd – próbujemy wejść wprost, z weryfikacją EAN
+        return f"https://www.castorama.pl/p/{ean}_CAPL.prd"
+
     async def __aenter__(self):
         await super().__aenter__()
         self.page.on("request", self._sniff_headers)
