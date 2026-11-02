@@ -308,6 +308,12 @@ class BaseScraper:
         """Czyta dane z JSON-LD (schema.org/Product) – najbardziej stabilne źródło, bo sklepy
         utrzymują je dla Google. Fallback: meta tagi."""
         info = ProductInfo()
+        try:   # strony renderowane w przeglądarce – dane produktu dochodzą z opóźnieniem
+            await self.page.wait_for_function(
+                """() => [...document.querySelectorAll("script[type='application/ld+json']")]
+                         .some(s => /"Product"/.test(s.textContent))""", timeout=15000)
+        except (PWTimeout, PWError):
+            pass
         blocks = await self.page.locator("script[type='application/ld+json']").all_text_contents()
         product = find_jsonld_product(blocks)
         if product:
@@ -450,6 +456,12 @@ class BaseScraper:
 
     async def _collect_candidates(self) -> list[str]:
         domain = urlparse(self.m["base_url"]).netloc
+        sels = self.m.get("product_link_selectors", [])
+        if sels:   # wyniki wyszukiwania też potrafią dochodzić z opóźnieniem
+            try:
+                await self.page.wait_for_selector(", ".join(sels), timeout=12000)
+            except (PWTimeout, PWError):
+                pass
         seen: list[str] = []
         for sel in self.m.get("product_link_selectors", []):
             try:
@@ -481,6 +493,12 @@ class BaseScraper:
             self._dump_snoop(ean)
 
         if info.raw_jsonld is None and info.price is None:
+            # druga próba: przerwa i ponowne wczytanie (często to tylko wolne ładowanie strony)
+            await asyncio.sleep(random.uniform(8, 15))
+            await self.goto(url)
+            info = await self.read_product()
+        if info.raw_jsonld is None and info.price is None:
+            await self.debug_dump(f"{ean}_brak_danych")
             if await self.is_discontinued_page():
                 raise ProductDiscontinued("Strona informuje, że produkt jest niedostępny/wycofany")
             raise LayoutChanged("Brak danych produktu (JSON-LD i meta) – możliwa zmiana układu strony")
