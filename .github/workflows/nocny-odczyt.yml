@@ -104,6 +104,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main          # najnowsze ustawienia (np. regiony), nawet jeśli zmieniły się w trakcie odczytu
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"

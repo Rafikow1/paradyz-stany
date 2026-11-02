@@ -113,8 +113,7 @@ def write_report(rows: list[dict], output_dir: str | Path, run_date: date | None
     df = pd.DataFrame(rows).reindex(columns=REPORT_COLUMNS)
     try:
         from utils.regions import region
-        df["Region"] = [rg if isinstance(rg, str) and rg else region(m, st)
-                        for rg, m, st in zip(df["Region"], df["Market"], df["ID_Sklepu_Fizycznego / Nazwa_Miasta"])]
+        df["Region"] = [region(m, st) for m, st in zip(df["Market"], df["ID_Sklepu_Fizycznego / Nazwa_Miasta"])]
     except Exception:
         pass
     df["Stan_Paradyz"] = pd.to_numeric(df["Stan_Paradyz"], errors="coerce").round(2)

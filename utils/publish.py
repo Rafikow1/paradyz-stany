@@ -65,7 +65,7 @@ def build_site(report: Path, docs: Path, password: str) -> None:
     rows = []
     for r in df.to_dict("records"):
         row = {}
-        rg = r.get("Region") if isinstance(r.get("Region"), str) and r.get("Region") else region(r.get("Market"), r.get("ID_Sklepu_Fizycznego / Nazwa_Miasta"))
+        rg = region(r.get("Market"), r.get("ID_Sklepu_Fizycznego / Nazwa_Miasta"))   # mapa jest źródłem prawdy
         if rg:
             row["rg"] = rg
         for col, k in SITE_COLS:
