@@ -67,6 +67,7 @@ markets:
   # ------------------------------------------------------------------
   castorama:
     enabled: true
+    product_pause: [15, 35]           # przerwa między produktami (s) – mniej podejrzane tempo
     name: "Castorama"
     base_url: "https://www.castorama.pl"
     search_url: "https://www.castorama.pl/search?term={query}"  # SPRAWDŹ przy pierwszym uruchomieniu

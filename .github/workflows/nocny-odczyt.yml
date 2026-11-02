@@ -27,13 +27,26 @@ env:
 
 jobs:
   odczyt:
-    name: Odczyt ${{ matrix.siec }}
+    name: Odczyt ${{ matrix.siec }} ${{ matrix.czesc }}
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 200
     strategy:
       fail-fast: false
       matrix:
-        siec: [leroy, castorama, obi]
+        include:
+          - { siec: leroy, czesc: "1/6", nr: 1 }
+          - { siec: leroy, czesc: "2/6", nr: 2 }
+          - { siec: leroy, czesc: "3/6", nr: 3 }
+          - { siec: leroy, czesc: "4/6", nr: 4 }
+          - { siec: leroy, czesc: "5/6", nr: 5 }
+          - { siec: leroy, czesc: "6/6", nr: 6 }
+          - { siec: castorama, czesc: "1/6", nr: 1 }
+          - { siec: castorama, czesc: "2/6", nr: 2 }
+          - { siec: castorama, czesc: "3/6", nr: 3 }
+          - { siec: castorama, czesc: "4/6", nr: 4 }
+          - { siec: castorama, czesc: "5/6", nr: 5 }
+          - { siec: castorama, czesc: "6/6", nr: 6 }
+          - { siec: obi, czesc: "1/1", nr: 1 }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -56,9 +69,9 @@ jobs:
       - name: Odczyt sklepów
         if: steps.prep.outputs.skip != '1'
         continue-on-error: true
-        timeout-minutes: 290
+        timeout-minutes: 150
         run: |
-          ARGS="--input input.xlsx --rynki ${{ matrix.siec }} --limit-czasu 270"
+          ARGS="--input input.xlsx --rynki ${{ matrix.siec }} --czesc ${{ matrix.czesc }} --limit-czasu 130"
           if [ -n "${{ github.event.inputs.limit }}" ]; then ARGS="$ARGS --limit ${{ github.event.inputs.limit }}"; fi
           xvfb-run -a python main.py $ARGS
       - name: Dokończenie nieudanych
@@ -67,7 +80,7 @@ jobs:
         timeout-minutes: 50
         run: |
           if ls output/stany_magazynowe_2*.xlsx >/dev/null 2>&1; then
-            xvfb-run -a python main.py --input input.xlsx --rynki ${{ matrix.siec }} --dokoncz --limit-czasu 40
+            xvfb-run -a python main.py --input input.xlsx --rynki ${{ matrix.siec }} --czesc ${{ matrix.czesc }} --dokoncz --limit-czasu 40
           fi
       - name: Wyniki (zaszyfrowane)
         if: always() && steps.prep.outputs.skip != '1'
@@ -80,7 +93,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always() && steps.prep.outputs.skip != '1'
         with:
-          name: wynik-${{ matrix.siec }}
+          name: wynik-${{ matrix.siec }}-${{ matrix.nr }}
           path: wynik/
           retention-days: 14
 

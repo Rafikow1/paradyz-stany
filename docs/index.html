@@ -32,7 +32,7 @@ button{padding:10px 14px;border-radius:8px;border:1px solid var(--accent);backgr
 button.ghost{background:transparent;color:var(--accent)}
 button:disabled{opacity:.5;cursor:default}
 .err{color:var(--red);font-size:13px;min-height:1.2em;margin-top:8px}
-.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end}
+.filters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;align-items:end}
 .admin{margin:28px 0 8px;font-size:13px;color:var(--muted)}
 .admin summary{cursor:pointer}
 .admin .card{margin-top:10px}
@@ -54,6 +54,7 @@ td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 a{color:var(--accent)}
 .more{text-align:center;margin:14px 0}
 .hidden{display:none}
+@media (max-width:1000px){ .filters{grid-template-columns:repeat(3,minmax(0,1fr))} }
 @media (max-width:820px){
   .filters{grid-template-columns:1fr 1fr}
   thead{display:none} table,tbody,tr,td{display:block;width:100%}
@@ -91,6 +92,8 @@ a{color:var(--accent)}
     </header>
 
     <div class="card filters">
+      <div><label for="fRegion">Region</label>
+        <select id="fRegion"><option value="">Wszystkie regiony</option></select></div>
       <div><label for="fMarket">Sieć</label>
         <select id="fMarket"><option value="">Wszystkie</option></select></div>
       <div><label for="fStore">Sklep</label>
@@ -212,12 +215,16 @@ function init(){
                            if(!PER_PACK[r.e] && num(r.q) > 0 && num(r.qm) > 0) PER_PACK[r.e] = r.qm / r.q; });
   const dps = DATA.rows.map(r => r.dp).filter(Boolean);
   if(dps.length) $("genInfo").textContent += " · stany Paradyża z: " + [...new Set(dps)].sort().join(", ");
+  const regions = [...new Set(DATA.rows.map(r => r.rg))].filter(Boolean).sort((a,b) => (a==="Bez regionu") - (b==="Bez regionu") || a.localeCompare(b));
+  regions.forEach(r => $("fRegion").add(new Option(r, r)));
+  try { const rg = localStorage.getItem("region"); if(rg && regions.includes(rg)) $("fRegion").value = rg; } catch(e){}
   const markets = [...new Set(DATA.rows.map(r => r.m))].filter(Boolean).sort();
   markets.forEach(m => $("fMarket").add(new Option(m, m)));
   try { const t = localStorage.getItem("thr"); if(t) $("fThr").value = t; } catch(e){}
   fillStores();
-  ["fMarket","fStore","fText","fLevel","fThr","fSort","fPar","fParMin","fOnline"].forEach(id =>
-    $(id).addEventListener("input", () => { if(id==="fMarket") fillStores(); if(id==="fThr") { try{localStorage.setItem("thr",$("fThr").value)}catch(e){} } apply(); }));
+  ["fRegion","fMarket","fStore","fText","fLevel","fThr","fSort","fPar","fParMin","fOnline"].forEach(id =>
+    $(id).addEventListener("input", () => { if(id==="fMarket" || id==="fRegion") fillStores();
+      if(id==="fRegion") { try{localStorage.setItem("region",$("fRegion").value)}catch(e){} } if(id==="fThr") { try{localStorage.setItem("thr",$("fThr").value)}catch(e){} } apply(); }));
   $("moreBtn").onclick = () => render(false);
   $("csvBtn").onclick = downloadCsv;
   $("xlsBtn").onclick = downloadXlsx;
@@ -225,18 +232,19 @@ function init(){
   apply();
 }
 function fillStores(){
-  const m = $("fMarket").value, sel = $("fStore"), cur = sel.value;
-  const stores = [...new Set(DATA.rows.filter(r => (!m || r.m===m) && r.s && r.s!=="Sklep internetowy" && r.s!=="—")
+  const m = $("fMarket").value, rg = $("fRegion").value, sel = $("fStore"), cur = sel.value;
+  const stores = [...new Set(DATA.rows.filter(r => (!m || r.m===m) && (!rg || r.rg===rg) && r.s && r.s!=="Sklep internetowy" && r.s!=="—")
                     .map(r => (m ? "" : r.m + " · ") + r.s))].sort((a,b)=>a.localeCompare(b,"pl"));
   sel.length = 1; stores.forEach(s => sel.add(new Option(s, s)));
   if(stores.includes(cur)) sel.value = cur;
 }
 function apply(){
-  const m = $("fMarket").value, st = $("fStore").value, t = $("fText").value.trim().toLowerCase();
+  const m = $("fMarket").value, rg = $("fRegion").value, st = $("fStore").value, t = $("fText").value.trim().toLowerCase();
   const lv = $("fLevel").value, online = $("fOnline").checked;
   const thr = parseFloat($("fThr").value) || 0, par = $("fPar").checked, parMin = parseFloat($("fParMin").value) || 0;
   view = DATA.rows.filter(r => {
     if(m && r.m !== m) return false;
+    if(rg && r.rg !== rg) return false;
     if(st && (m ? r.s : r.m + " · " + r.s) !== st) return false;
     if(!online && r.s === "Sklep internetowy") return false;
     if(par && !(num(r.p) >= parMin)) return false;
@@ -279,7 +287,7 @@ function render(reset){
   const part = view.slice(shown, shown + PAGE);
   $("rows").insertAdjacentHTML("beforeend", part.map(r => `<tr>
     <td>${esc(r.n)}<span class="idx">${esc(r.i)} · EAN ${esc(r.e)}</span></td>
-    <td data-l="Sklep">${esc(r.m)}<span class="idx">${esc(r.s)}</span>${r.d && String(r.d).slice(0,10) !== DATA.generated.slice(0,10) ? `<span class="idx" style="color:var(--amber)">stan z ${esc(String(r.d).slice(0,10))}</span>` : ""}</td>
+    <td data-l="Sklep">${esc(r.m)}${r.rg ? ` <span class="pill" style="background:var(--bg);border:1px solid var(--line);font-weight:500">${esc(r.rg)}</span>` : ""}<span class="idx">${esc(r.s)}</span>${r.d && String(r.d).slice(0,10) !== DATA.generated.slice(0,10) ? `<span class="idx" style="color:var(--amber)">stan z ${esc(String(r.d).slice(0,10))}</span>` : ""}</td>
     <td class="num" data-l="Stan (opak.)">${num(r.q)!==null ? esc(fmt(r.q)) : ""}</td>
     <td class="num" data-l="Stan m²">${r._m2!=null ? esc(fmt(r._m2,2)) : ""}</td>
     <td>${pill(r)}</td>
@@ -307,8 +315,8 @@ function save(blob, name){
   document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 1000);
 }
 function downloadCsv(){
-  const head = ["Sieć","Sklep","EAN","Indeks","Produkt","Stan (opak.)","Stan m2","Stan","Stan Paradyż","JM","Cena/m2","Link"];
-  const keys = ["m","s","e","i","n","q","_m2","_Lpl","p","j","c","u"];
+  const head = ["Region","Sieć","Sklep","EAN","Indeks","Produkt","Stan (opak.)","Stan m2","Stan","Stan Paradyż","JM","Cena/m2","Link"];
+  const keys = ["rg","m","s","e","i","n","q","_m2","_Lpl","p","j","c","u"];
   const LPL = {zero:"Brak", low:"Niski", ok:"OK"}; view.forEach(r => r._Lpl = LPL[r._L] || "");
   const q = v => { v = v==null ? "" : String(v); if(typeof v==="string" && /^\d+\.\d+$/.test(v)) v = v.replace(".",","); return /[;"\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
   const lines = [head.join(";")].concat(view.map(r => keys.map(k => q(typeof r[k]==="number" ? String(r[k]).replace(".",",") : r[k])).join(";")));

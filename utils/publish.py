@@ -61,9 +61,13 @@ def build_site(report: Path, docs: Path, password: str) -> None:
     import pandas as pd
     df = pd.read_excel(report, sheet_name="Stany", dtype={"EAN": str})
     df = df[df["Status"].isin(["OK", "NIE_ZNALEZIONO"]) | df["Status"].isna()]
+    from utils.regions import region
     rows = []
     for r in df.to_dict("records"):
         row = {}
+        rg = r.get("Region") if isinstance(r.get("Region"), str) and r.get("Region") else region(r.get("Market"), r.get("ID_Sklepu_Fizycznego / Nazwa_Miasta"))
+        if rg:
+            row["rg"] = rg
         for col, k in SITE_COLS:
             v = r.get(col)
             if v is None or (isinstance(v, float) and v != v):

@@ -33,6 +33,7 @@ def parse_args():
     p.add_argument("--limit", type=int, default=0, help="maks. liczba produktów na sieć (test)")
     p.add_argument("--snoop", action="store_true", help="zapisuj odpowiedzi XHR/Fetch do data/snoop/")
     p.add_argument("--headless", action="store_true", help="ukryj okno przeglądarki")
+    p.add_argument("--czesc", default="", help="np. 2/6 – druga z sześciu części listy (podział na serwery)")
     p.add_argument("--limit-czasu", type=int, default=0,
                    help="po ilu minutach przestać zaczynać nowe produkty (zapisuje to, co zdążył)")
     p.add_argument("--dokoncz", action="store_true",
@@ -162,6 +163,10 @@ async def main_async(args, log):
         for k in targets:
             if k in queues and not any(x["EAN"] == p["EAN"] for x in queues[k]):
                 queues[k].append(p)
+    if args.czesc:
+        i, n = (int(x) for x in args.czesc.split("/"))
+        queues = {k: [p for j, p in enumerate(q) if j % n == i - 1] for k, q in queues.items()}
+        log.info("Część %d/%d: %s", i, n, {k: len(v) for k, v in queues.items()})
     # codzienne przesunięcie kolejki – przy braku czasu nie pomijamy zawsze tych samych produktów
     if not args.limit:
         for k, q in queues.items():

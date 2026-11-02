@@ -50,7 +50,7 @@ def keep_previous(rows: list[dict]) -> list[dict]:
 def main(src: Path, out: Path):
     rows, url_map = [], {}
     for d in sorted(p for p in src.iterdir() if p.is_dir()):
-        key = d.name.replace("wynik-", "")
+        key = d.name.replace("wynik-", "").split("-")[0]
         reports = sorted(f for f in d.rglob("stany_magazynowe_2*.xlsx"))
         if reports:
             df = pd.read_excel(reports[-1], sheet_name="Stany", dtype={"EAN": str})
@@ -61,9 +61,11 @@ def main(src: Path, out: Path):
             print(f"{key}: BRAK raportu")
         um = next(d.rglob("url_map.json"), None)
         if um:
-            part = json.loads(um.read_text(encoding="utf-8"))
-            if key in part:
-                url_map[key] = part[key]
+            part = json.loads(um.read_text(encoding="utf-8")).get(key, {})
+            dst = url_map.setdefault(key, {})
+            for ean, e in part.items():   # kilka części tej samej sieci – wygrywa najnowszy wpis
+                if ean not in dst or str(e.get("updated_at", "")) > str(dst[ean].get("updated_at", "")):
+                    dst[ean] = e
     rows = keep_previous(rows)
     if not rows:
         raise SystemExit("Żadne zadanie nie zwróciło wyników.")
@@ -71,7 +73,8 @@ def main(src: Path, out: Path):
     Path("data").mkdir(exist_ok=True)
     old = Path("dane/url_map.json")
     merged = json.loads(old.read_text(encoding="utf-8")) if old.exists() else {}
-    merged.update(url_map)
+    for k, v in url_map.items():
+        merged.setdefault(k, {}).update(v)
     Path("data/url_map.json").write_text(json.dumps(merged, ensure_ascii=False, indent=1), encoding="utf-8")
 
 

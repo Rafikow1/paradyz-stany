@@ -31,7 +31,7 @@ COLUMN_ALIASES = {
 MARKET_KEYS = {"leroy merlin": "leroy", "leroy": "leroy", "castorama": "castorama", "obi": "obi"}
 
 REPORT_COLUMNS = [
-    "EAN", "Indeks_Producenta", "Nazwa_Produktu", "Market", "ID_Sklepu_Fizycznego / Nazwa_Miasta",
+    "EAN", "Indeks_Producenta", "Nazwa_Produktu", "Market", "Region", "ID_Sklepu_Fizycznego / Nazwa_Miasta",
     "Stan_Magazynowy", "Stan_Sklep_m2", "Sygnal",
     "Stan_Paradyz", "JM", "Data_Stanu_Paradyz", "Uwagi_Paradyz",
     "Cena_za_m2", "Cena_za_opakowanie", "m2_w_opakowaniu",
@@ -111,6 +111,12 @@ def write_report(rows: list[dict], output_dir: str | Path, run_date: date | None
     out = out_dir / f"stany_magazynowe_{run_date:%Y-%m-%d}.xlsx"
 
     df = pd.DataFrame(rows).reindex(columns=REPORT_COLUMNS)
+    try:
+        from utils.regions import region
+        df["Region"] = [rg if isinstance(rg, str) and rg else region(m, st)
+                        for rg, m, st in zip(df["Region"], df["Market"], df["ID_Sklepu_Fizycznego / Nazwa_Miasta"])]
+    except Exception:
+        pass
     df["Stan_Paradyz"] = pd.to_numeric(df["Stan_Paradyz"], errors="coerce").round(2)
 
     summary = (df.assign(n=1).pivot_table(index="Market", columns="Status", values="n",
