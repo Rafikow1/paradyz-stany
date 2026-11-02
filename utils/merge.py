@@ -32,13 +32,14 @@ def keep_previous(rows: list[dict]) -> list[dict]:
         print("Poprzedni raport nieczytelny:", e)
         return rows
     prev = prev.astype(object).where(prev.notna(), None)
-    good_now = {(r.get("Market"), str(r.get("EAN"))) for r in rows if r.get("Status") in GOOD}
+    # "nie znaleziono" dziś, a wcześniej był odczyt – to raczej kaprys wyszukiwarki, zostawiamy stary stan
+    good_now = {(r.get("Market"), str(r.get("EAN"))) for r in rows if r.get("Status") == "OK"}
     seen_now = {(r.get("Market"), str(r.get("EAN"))) for r in rows}
     markets_now = {r.get("Market") for r in rows}
     kept = []
     for r in prev.to_dict("records"):
         key = (r.get("Market"), str(r.get("EAN")))
-        if r.get("Status") in GOOD and key not in good_now and (key in seen_now or r.get("Market") not in markets_now):
+        if r.get("Status") == "OK" and key not in good_now and (key in seen_now or r.get("Market") not in markets_now):
             r["Uwagi_Programu"] = f"stan z poprzedniego odczytu ({str(r.get('Data_Odczytu'))[:10]})"
             kept.append(r)
     restored = {(r.get("Market"), str(r.get("EAN"))) for r in kept}
