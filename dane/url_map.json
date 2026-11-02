@@ -640,11 +640,6 @@
    "name": "TIXXIS GREY ELEVATOR 14,8X30 G1",
    "updated_at": "2026-11-02T08:23:48"
   },
-  "5904584162657": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:24:50"
-  },
   "5900139038415": {
    "status": "FOUND",
    "url": "https://www.castorama.pl/p/5900139038415_CAPL.prd",
@@ -669,11 +664,6 @@
    "name": "PENTE WOOD BROWN ŚCIANA STRUKTURA MAT 30X60 G1",
    "updated_at": "2026-11-02T08:32:49"
   },
-  "5904584158162": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:33:58"
-  },
   "5902610514067": {
    "status": "FOUND",
    "url": "https://www.castorama.pl/p/5902610514067_CAPL.prd",
@@ -691,11 +681,6 @@
    "url": "https://www.castorama.pl/p/5063022711885_CAPL.prd",
    "name": "TIXXIS GREY STEP 30X60 G1",
    "updated_at": "2026-11-02T08:24:08"
-  },
-  "5900139037807": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:25:23"
   },
   "5904584156410": {
    "status": "FOUND",
@@ -720,11 +705,6 @@
    "url": "https://www.castorama.pl/p/5904584187056_CAPL.prd",
    "name": "KENSINGTON BEIGE GRES SZKL. REKT. MAT. 9,8X59,8 G1",
    "updated_at": "2026-11-02T08:30:41"
-  },
-  "5063022581631": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:32:19"
   },
   "5900139030426": {
    "status": "FOUND",
@@ -756,11 +736,6 @@
    "name": "TIXXIS GRAFIT 30X60 G1",
    "updated_at": "2026-11-02T08:22:56"
   },
-  "5904584155901": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:26:11"
-  },
   "5063022639097": {
    "status": "FOUND",
    "url": "https://www.castorama.pl/p/5063022639097_CAPL.prd",
@@ -778,11 +753,6 @@
    "url": "https://www.castorama.pl/p/5904584153471_CAPL.prd",
    "name": "GENESIS BEIGE GRES SZKL. STRUKTURA MAT. 60X60 G1",
    "updated_at": "2026-11-02T08:29:03"
-  },
-  "5900139032406": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:32:21"
   },
   "5902610528330": {
    "status": "FOUND",
@@ -813,16 +783,6 @@
    "url": "https://www.castorama.pl/p/5902610522703_CAPL.prd",
    "name": "PERIT WOOD NATURALE ŚCIANA REKT. MAT 29,8X89,8 G1",
    "updated_at": "2026-11-02T08:24:12"
-  },
-  "5063022654779": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:25:09"
-  },
-  "5063022581204": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:26:16"
   },
   "5904584162626": {
    "status": "FOUND",
@@ -878,11 +838,6 @@
    "name": "GREENWOOD BROWN GRES SZKL. REKT. MAT. 14,8X89,8 G1",
    "updated_at": "2026-11-02T08:32:30"
   },
-  "5900139038149": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:34:15"
-  },
   "5063022581341": {
    "status": "FOUND",
    "url": "https://www.castorama.pl/p/5063022581341_CAPL.prd",
@@ -900,16 +855,6 @@
    "url": "https://www.castorama.pl/p/5902610522857_CAPL.prd",
    "name": "PENTE BEIGE ŚCIANA MAT. 30X60 G1",
    "updated_at": "2026-11-02T08:23:53"
-  },
-  "5904584158285": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:25:11"
-  },
-  "5900139005592": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:25:52"
   },
   "5063022581389": {
    "status": "FOUND",
@@ -934,21 +879,6 @@
    "url": "https://www.castorama.pl/p/5900139038101_CAPL.prd",
    "name": "CASTELIS BROWN GRES SZKL. REKT. MAT. 59,8X59,8 G1",
    "updated_at": "2026-11-02T08:29:47"
-  },
-  "5904584155871": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:30:56"
-  },
-  "5063022639486": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:31:40"
-  },
-  "5902610513978": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:32:34"
   },
   "5900139008913": {
    "status": "FOUND",
