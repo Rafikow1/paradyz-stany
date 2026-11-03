@@ -5,7 +5,7 @@ W <folder_z_wynikami>/<sieć>/ są: raport *.xlsx i url_map.json z danej sieci.
 """
 import json
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -39,7 +39,8 @@ def keep_previous(rows: list[dict]) -> list[dict]:
     kept = []
     for r in prev.to_dict("records"):
         key = (r.get("Market"), str(r.get("EAN")))
-        if r.get("Status") == "OK" and key not in good_now and (key in seen_now or r.get("Market") not in markets_now):
+        fresh = str(r.get("Data_Odczytu") or "")[:10] >= (date.today() - timedelta(days=14)).isoformat()
+        if r.get("Status") == "OK" and key not in good_now and fresh:   # stan starszy niż 14 dni już nie wraca
             r["Uwagi_Programu"] = f"stan z poprzedniego odczytu ({str(r.get('Data_Odczytu'))[:10]})"
             kept.append(r)
     restored = {(r.get("Market"), str(r.get("EAN"))) for r in kept}
@@ -50,14 +51,22 @@ def keep_previous(rows: list[dict]) -> list[dict]:
 
 def main(src: Path, out: Path):
     rows, url_map = [], {}
-    for d in sorted(p for p in src.iterdir() if p.is_dir()):
-        key = d.name.replace("wynik-", "").split("-")[0]
+    # najpierw pierwsza runda (wynik-*), potem druga (wynik2-*) – druga nadpisuje produkty, które odczytała
+    dirs = sorted((p for p in src.iterdir() if p.is_dir()), key=lambda p: (p.name.startswith("wynik2-"), p.name))
+    for d in dirs:
+        key = d.name.split("-")[1]
         reports = sorted(f for f in d.rglob("stany_magazynowe_2*.xlsx"))
         if reports:
             df = pd.read_excel(reports[-1], sheet_name="Stany", dtype={"EAN": str})
             df = df.astype(object).where(df.notna(), None)
-            rows += df.to_dict("records")
-            print(f"{key}: {len(df)} wierszy z {reports[-1].name}")
+            new = df.to_dict("records")
+            if d.name.startswith("wynik2-"):
+                fixed = {(r.get("Market"), str(r.get("EAN"))) for r in new if r.get("Status") == "OK"}
+                rows = [r for r in rows if (r.get("Market"), str(r.get("EAN"))) not in fixed]
+                new = [r for r in new if (r.get("Market"), str(r.get("EAN"))) in fixed]
+                print(f"{d.name}: druga runda poprawiła {len(fixed)} produktów")
+            rows += new
+            print(f"{d.name}: {len(new)} wierszy z {reports[-1].name}")
         else:
             print(f"{key}: BRAK raportu")
         um = next(d.rglob("url_map.json"), None)

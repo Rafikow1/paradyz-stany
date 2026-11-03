@@ -2,11 +2,15 @@ name: Nocny odczyt stanów
 
 on:
   schedule:
-    - cron: "7 21 * * *"         # ok. 22:07 czasu polskiego zimą (GitHub potrafi startować z opóźnieniem)
+    # kilka terminów – GitHub potrafi opóźnić start o kilka godzin; pierwszy, który ruszy, robi odczyt,
+    # kolejne widzą świeże dane i kończą się po kilku sekundach
+    - cron: "7 21 * * *"         # ok. 22:07
+    - cron: "37 23 * * *"        # ok. 00:37
+    - cron: "7 2 * * *"          # ok. 03:07
   workflow_dispatch:
     inputs:
       limit:
-        description: "Test: ile produktów na sieć (puste = wszystkie)"
+        description: "Test: ile produktów na część (puste = wszystkie)"
         required: false
         default: ""
       rynki:
@@ -24,9 +28,36 @@ concurrency:
 env:
   DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
   PYTHONUNBUFFERED: "1"
+  TZ: Europe/Warsaw
 
 jobs:
+  sprawdz:
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.c.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: c
+        run: |
+          python3 - <<'PY' >> $GITHUB_OUTPUT
+          import json, os
+          from datetime import datetime
+          run = "1"
+          if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+              try:
+                  g = json.load(open("docs/stan.json"))["generated"]
+                  age = (datetime.now() - datetime.strptime(g[:16], "%Y-%m-%d %H:%M")).total_seconds() / 3600
+                  if age < 10:
+                      run = "0"
+              except Exception:
+                  pass
+          print(f"run={run}")
+          PY
+          cat $GITHUB_OUTPUT
+
   odczyt:
+    needs: sprawdz
+    if: needs.sprawdz.outputs.run == '1'
     name: Odczyt ${{ matrix.siec }} ${{ matrix.czesc }}
     runs-on: ubuntu-latest
     timeout-minutes: 200
@@ -60,15 +91,13 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
-      - name: Instalacja
-        run: |
-          pip install -r requirements.txt
-          python -m playwright install --with-deps chromium
       - name: Przygotowanie
         id: prep
         run: |
           WANT="${{ github.event.inputs.rynki }}"
           if [ -n "$WANT" ] && ! echo " $WANT " | grep -q " ${{ matrix.siec }} "; then echo "skip=1" >> $GITHUB_OUTPUT; exit 0; fi
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
           python -m utils.publish decrypt dane/input.xlsx.enc input.xlsx
           mkdir -p data
           cp dane/url_map.json data/url_map.json 2>/dev/null || true
@@ -91,12 +120,7 @@ jobs:
           fi
       - name: Wyniki (zaszyfrowane)
         if: always() && steps.prep.outputs.skip != '1'
-        run: |
-          mkdir -p wynik
-          for f in output/stany_magazynowe_2*.xlsx; do [ -f "$f" ] && python -m utils.publish encrypt "$f" "wynik/$(basename $f).enc"; done
-          cp data/url_map.json wynik/url_map.json 2>/dev/null || true
-          cp data/lm_wspolrzedne_miast.json wynik/lm_wspolrzedne_miast.json 2>/dev/null || true
-          zip -qr dziennik.zip logs data/debug 2>/dev/null && python -m utils.publish encrypt dziennik.zip wynik/dziennik.zip.enc || true
+        run: python -m utils.pack_result wynik
       - uses: actions/upload-artifact@v4
         if: always() && steps.prep.outputs.skip != '1'
         with:
@@ -104,9 +128,80 @@ jobs:
           path: wynik/
           retention-days: 14
 
+  druga_runda:
+    needs: [sprawdz, odczyt]
+    if: always() && needs.sprawdz.outputs.run == '1'
+    name: Poprawka ${{ matrix.siec }} ${{ matrix.czesc }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 18
+      matrix:
+        include:
+          - { siec: leroy, czesc: "1/6", nr: 1 }
+          - { siec: leroy, czesc: "2/6", nr: 2 }
+          - { siec: leroy, czesc: "3/6", nr: 3 }
+          - { siec: leroy, czesc: "4/6", nr: 4 }
+          - { siec: leroy, czesc: "5/6", nr: 5 }
+          - { siec: leroy, czesc: "6/6", nr: 6 }
+          - { siec: castorama, czesc: "1/12", nr: 1 }
+          - { siec: castorama, czesc: "2/12", nr: 2 }
+          - { siec: castorama, czesc: "3/12", nr: 3 }
+          - { siec: castorama, czesc: "4/12", nr: 4 }
+          - { siec: castorama, czesc: "5/12", nr: 5 }
+          - { siec: castorama, czesc: "6/12", nr: 6 }
+          - { siec: castorama, czesc: "7/12", nr: 7 }
+          - { siec: castorama, czesc: "8/12", nr: 8 }
+          - { siec: castorama, czesc: "9/12", nr: 9 }
+          - { siec: castorama, czesc: "10/12", nr: 10 }
+          - { siec: castorama, czesc: "11/12", nr: 11 }
+          - { siec: castorama, czesc: "12/12", nr: 12 }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: wynik-${{ matrix.siec }}-${{ matrix.nr }}
+          path: poprzedni
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Czy trzeba poprawiać?
+        id: need
+        run: |
+          WANT="${{ github.event.inputs.rynki }}"
+          if [ -n "$WANT" ] && ! echo " $WANT " | grep -q " ${{ matrix.siec }} "; then echo "retry=0" >> $GITHUB_OUTPUT; exit 0; fi
+          pip install -q cryptography pandas openpyxl
+          python -m utils.pack_result needs-retry poprzedni >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
+      - name: Ponowny odczyt na nowym serwerze
+        if: steps.need.outputs.retry == '1'
+        continue-on-error: true
+        timeout-minutes: 75
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+          python -m utils.publish decrypt dane/input.xlsx.enc input.xlsx
+          mkdir -p data output
+          cp dane/url_map.json data/url_map.json 2>/dev/null || true
+          cp dane/lm_wspolrzedne_miast.json data/lm_wspolrzedne_miast.json 2>/dev/null || true
+          python -m utils.pack_result restore poprzedni output
+          xvfb-run -a python main.py --input input.xlsx --rynki ${{ matrix.siec }} --czesc ${{ matrix.czesc }} --dokoncz --limit-czasu 60
+      - name: Wyniki (zaszyfrowane)
+        if: always() && steps.need.outputs.retry == '1'
+        run: python -m utils.pack_result wynik
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.need.outputs.retry == '1'
+        with:
+          name: wynik2-${{ matrix.siec }}-${{ matrix.nr }}
+          path: wynik/
+          retention-days: 14
+
   publikacja:
-    needs: odczyt
-    if: always()
+    needs: [sprawdz, odczyt, druga_runda]
+    if: always() && needs.sprawdz.outputs.run == '1'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

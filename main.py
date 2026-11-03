@@ -16,7 +16,7 @@ import time
 from datetime import date
 
 from scrapers import SCRAPERS
-from scrapers.base import ScraperError, StockResult
+from scrapers.base import BurnedIP, ScraperError, StockResult
 from utils.common import UrlCache, load_config, setup_logging
 from utils.excel_handler import load_products, write_report
 
@@ -130,6 +130,11 @@ async def run_market(key: str, products: list[dict], cfg: dict, cache: UrlCache,
                         for r in await scraper.check(product, force_discover=args.od_nowa):
                             rows.append(make_row(product, name, r, sig))
                     scraper.log.info("[%d/%d] %s OK", i, len(products), ean)
+                except BurnedIP as e:
+                    scraper.log.warning("%s – przerywam, %d produktów zostaje dla drugiej rundy", e, len(products) - i + 1)
+                    for rest in products[i - 1:]:
+                        rows.append(make_row(rest, name, StockResult("—", status="NIE_SPRAWDZONO", note=str(e))))
+                    break
                 except ScraperError as e:
                     scraper.log.warning("[%d/%d] %s %s: %s", i, len(products), ean, e.status, e)
                     rows.append(make_row(product, name, StockResult("—", status=e.status, note=str(e),

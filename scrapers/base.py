@@ -44,6 +44,10 @@ class Blocked(ScraperError):
     status = "ZABLOKOWANY"
 
 
+class BurnedIP(Blocked):
+    """Sklep blokuje ten serwer od początku – przerywamy, produkty dostanie druga runda."""
+
+
 BLOCK_MARKERS = ("just a moment", "access denied", "attention required", "captcha",
                  "pardon our interruption", "request unsuccessful", "are you a robot", "robot")
 
@@ -107,6 +111,7 @@ class BaseScraper:
         self._capture_tasks: set[asyncio.Task] = set()
         self._cookies_done = False
         self._blocks = 0          # ile blokad z rzędu – kolejne oczekiwania są dłuższe
+        self._any_ok = False      # czy ten serwer odczytał już choć jeden produkt
 
     # ================================================================ browser
     async def __aenter__(self):
@@ -201,6 +206,9 @@ class BaseScraper:
                     waits = waits if isinstance(waits, list) else [waits]
                     wait = waits[min(self._blocks, len(waits) - 1)]
                     self._blocks += 1
+                    if not self._any_ok and self._blocks >= self.g.get("burned_ip_blocks", 3):
+                        # serwer zablokowany od samego początku – czekanie nie pomoże, lepiej oddać pracę innemu serwerowi
+                        raise BurnedIP("Adres tego serwera jest zablokowany przez sklep")
                     self.log.warning("Wykryto blokadę/captcha (%s). Czekam %s (blokada nr %d z rzędu)%s",
                                      status, f"{wait // 60} min" if wait >= 120 else f"{wait} s", self._blocks,
                                      " – możesz rozwiązać captcha w oknie przeglądarki" if not self.g.get("headless") else "")
@@ -503,6 +511,7 @@ class BaseScraper:
                 raise ProductDiscontinued("Strona informuje, że produkt jest niedostępny/wycofany")
             raise LayoutChanged("Brak danych produktu (JSON-LD i meta) – możliwa zmiana układu strony")
 
+        self._any_ok = True
         results = [self.online_result(info, url)]
         all_stores = await self.all_stores_stock(product, info, url)
         if all_stores:
