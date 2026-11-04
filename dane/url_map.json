@@ -905,19 +905,19 @@
    "updated_at": "2026-11-02T19:43:59"
   },
   "5904584158285": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:46:26"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5904584158285_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5904584155871": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:48:00"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5904584155871_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5063022581631": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:49:03"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/gres-marjo-goodhome-30-x-30-cm-brown-1-62-m2/5063022581631_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5063022654779": {
    "status": "FOUND",
@@ -938,19 +938,19 @@
    "updated_at": "2026-11-02T19:44:13"
   },
   "5063022639486": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:47:05"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5063022639486_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5902610513978": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:47:47"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610513978_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5904584162657": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:46:41"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/gres-mrozoodporny-vesis-paradyz-59-8-x-59-8-cm-gold-1-43-m2/5904584162657_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5900139037807": {
    "status": "FOUND",
@@ -959,9 +959,9 @@
    "updated_at": "2026-11-02T19:45:44"
   },
   "5904584155901": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T19:46:30"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5904584155901_CAPL.prd",
+   "updated_at": "2026-11-04T08:21:24"
   },
   "5900139032406": {
    "status": "FOUND",
