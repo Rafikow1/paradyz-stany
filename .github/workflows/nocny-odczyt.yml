@@ -2,11 +2,11 @@ name: Nocny odczyt stanów
 
 on:
   schedule:
-    # kilka terminów – GitHub potrafi opóźnić start o kilka godzin; pierwszy, który ruszy, robi odczyt,
-    # kolejne widzą świeże dane i kończą się po kilku sekundach
-    - cron: "7 21 * * *"         # ok. 22:07
-    - cron: "37 23 * * *"        # ok. 00:37
-    - cron: "7 2 * * *"          # ok. 03:07
+    # poranny odczyt – sieci (np. LM) aktualizują stany na stronie rano, po nocy
+    # kilka terminów, bo GitHub potrafi opóźnić start; pierwszy robi odczyt, kolejne kończą się od razu
+    - cron: "7 4 * * *"          # ok. 05:07 (zimą), 06:07 (latem)
+    - cron: "37 4 * * *"         # ok. 05:37
+    - cron: "7 5 * * *"          # ok. 06:07
   workflow_dispatch:
     inputs:
       limit:
@@ -231,4 +231,8 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add docs dane/url_map.json dane/lm_wspolrzedne_miast.json 2>/dev/null || git add docs
           git diff --cached --quiet || git commit -m "Odczyt $(date +'%Y-%m-%d %H:%M')"
-          git pull --rebase -q origin main && git push
+          for i in 1 2 3 4 5; do   # GitHub czasem chwilowo odrzuca zapis – ponawiamy
+            git pull --rebase -q origin main && git push && exit 0
+            echo "Zapis nieudany, próba $i – czekam"; sleep $((i * 20))
+          done
+          exit 1
