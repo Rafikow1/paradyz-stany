@@ -2,11 +2,11 @@ name: Nocny odczyt stanów
 
 on:
   schedule:
-    # poranny odczyt – sieci (np. LM) aktualizują stany na stronie rano, po nocy
+    # odczyt rano, po otwarciu marketów (6:00) – sieci aktualizują stany na stronie dopiero wtedy
     # kilka terminów, bo GitHub potrafi opóźnić start; pierwszy robi odczyt, kolejne kończą się od razu
-    - cron: "7 4 * * *"          # ok. 05:07 (zimą), 06:07 (latem)
-    - cron: "37 4 * * *"         # ok. 05:37
-    - cron: "7 5 * * *"          # ok. 06:07
+    - cron: "7 6 * * *"          # ok. 07:07 zimą (latem 08:07)
+    - cron: "22 6 * * *"         # ok. 07:22
+    - cron: "37 6 * * *"         # ok. 07:37
   workflow_dispatch:
     inputs:
       limit:
