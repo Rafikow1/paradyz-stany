@@ -405,84 +405,93 @@
    "updated_at": "2026-11-02T02:31:16"
   },
   "5900144080966": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144080966_CAPL.prd",
+   "updated_at": "2026-11-04T08:23:44",
+   "name": "CHROMATIC GRAFIT COKÓŁ MAT. 7,2X59,8 G1"
   },
   "5900144080959": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:28:58"
   },
   "5902610531033": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:27:07"
   },
   "5902610511523": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610511523_CAPL.prd",
+   "updated_at": "2026-11-04T08:29:35",
+   "name": "ETNIC BEIGE ŚCIANA STRUKTURA REKT. 25X75 G1"
   },
   "5900139033069": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139033069_CAPL.prd",
+   "updated_at": "2026-11-04T08:28:12",
+   "name": "EXPEDITION GRAFIT PODŁOGA STRUKTURA 40X40 G1"
   },
   "5900139033045": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139033045_CAPL.prd",
+   "updated_at": "2026-11-04T08:28:52",
+   "name": "EXPEDITION GRYS PODŁOGA STRUKTURA 40X40 G1"
   },
   "5900139033083": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:28:34"
   },
   "5900139033106": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:27:31"
   },
   "5900144007772": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144007772_CAPL.prd",
+   "updated_at": "2026-11-04T08:24:52",
+   "name": "KALAHARI RUST INSERTO A 25X75 G1"
   },
   "5900144007796": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:28:20"
   },
   "5900144007826": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:27:37"
   },
   "5902610514036": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610514036_CAPL.prd",
+   "updated_at": "2026-11-04T08:29:05",
+   "name": "KALAHARI WOOD ŚCIANA STRUKTURA REKT. 25X75 G1"
   },
   "5904584184895": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:29:35"
   },
   "5900144047532": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144047532_CAPL.prd",
+   "updated_at": "2026-11-04T08:28:57",
+   "name": "MAGNOLIA GRYS INSERTO A 25X75 G1"
   },
   "5900144047549": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144047549_CAPL.prd",
+   "updated_at": "2026-11-04T08:27:53",
+   "name": "MAGNOLIA GRYS INSERTO B 25X75 G1"
   },
   "5900144047556": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144047556_CAPL.prd",
+   "updated_at": "2026-11-04T08:29:13",
+   "name": "MAGNOLIA GRYS INSERTO C 25X75 G1"
   },
   "5902610517945": {
    "status": "FOUND",
@@ -511,52 +520,56 @@
   "5063022581648": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:31:08"
   },
   "5063022581686": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:31:07"
   },
   "5063022581402": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:29:55"
   },
   "5063022581549": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:27:24"
   },
   "5900139030464": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139030464_CAPL.prd",
+   "updated_at": "2026-11-04T08:22:38",
+   "name": "OCTANE GRAFIT STOPNICA PROSTA 30X30 G1"
   },
   "5900139032420": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139032420_CAPL.prd",
+   "updated_at": "2026-11-04T08:22:25",
+   "name": "OCTANE GRAFIT STOPNICA PROSTA 30X60 G1"
   },
   "5900139030488": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:30:50"
   },
   "5900139032468": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139032468_CAPL.prd",
+   "updated_at": "2026-11-04T08:31:39",
+   "name": "OCTANE OCHRA STOPNICA PROSTA 30X60 G1"
   },
   "5902610594946": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610594946_CAPL.prd",
+   "updated_at": "2026-11-04T08:30:18",
+   "name": "PENTE BEIGE INSERTO MAT 30X60 G1"
   },
   "5063022656155": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:32:19"
   },
   "5063022581655": {
    "status": "FOUND",
@@ -567,7 +580,7 @@
   "5063022581228": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:32:57"
   },
   "5063022581426": {
    "status": "FOUND",
@@ -578,7 +591,7 @@
   "5063022581242": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:25:59"
   },
   "5063022581211": {
    "status": "FOUND",
@@ -589,7 +602,7 @@
   "5063022581198": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:25:43"
   },
   "5904584158629": {
    "status": "FOUND",
@@ -598,29 +611,33 @@
    "updated_at": "2026-11-02T02:46:17"
   },
   "5063022711878": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5063022711878_CAPL.prd",
+   "updated_at": "2026-11-04T08:26:42",
+   "name": "TIXXIS GRAFIT STEP 30X30 G1"
   },
   "5063022711939": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "updated_at": "2026-11-04T08:26:23"
   },
   "5902610530975": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610530975_CAPL.prd",
+   "updated_at": "2026-11-04T08:24:20",
+   "name": "TUFOLI BEIGE ŚCIANA REKT. MAT 29,8X59,8 G1"
   },
   "5902610531019": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610531019_CAPL.prd",
+   "updated_at": "2026-11-04T08:24:02",
+   "name": "TUFOLI BROWN ŚCIANA REKT. DEKOR MAT 29,8X59,8 G1"
   },
   "5902610530999": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-02T08:20:40"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610530999_CAPL.prd",
+   "updated_at": "2026-11-04T08:23:43",
+   "name": "TUFOLI CREMA ŚCIANA STRUKTURA REKT. MAT 29,8X59,8 G1"
   },
   "5900139037760": {
    "status": "FOUND",
