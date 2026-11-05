@@ -37,6 +37,7 @@ jobs:
       run: ${{ steps.c.outputs.run }}
     steps:
       - uses: actions/checkout@v4
+      - run: git fetch -q --depth 1 origin dane-strony || true
       - id: c
         run: |
           python3 - <<'PY' >> $GITHUB_OUTPUT
@@ -45,7 +46,9 @@ jobs:
           run = "1"
           if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
               try:
-                  g = json.load(open("docs/stan.json"))["generated"]
+                  import subprocess
+                  raw = subprocess.run(["git", "show", "origin/dane-strony:stan.json"], capture_output=True, text=True).stdout
+                  g = json.loads(raw or open("docs/stan.json").read())["generated"]
                   age = (datetime.now() - datetime.strptime(g[:16], "%Y-%m-%d %H:%M")).total_seconds() / 3600
                   if age < 10:
                       run = "0"
@@ -216,6 +219,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: wyniki
+      - name: Poprzednie dane (do uzupełnienia braków)
+        run: |
+          if git fetch -q --depth 1 origin dane-strony; then
+            mkdir -p docs && git show FETCH_HEAD:raport.enc > docs/raport.enc
+          fi
       - name: Odszyfrowanie i scalenie
         run: |
           for f in $(find wyniki -name "stany_magazynowe_2*.xlsx.enc"); do python -m utils.publish decrypt "$f" "${f%.enc}"; done
@@ -225,11 +233,26 @@ jobs:
       - name: Publikacja na stronie
         if: github.event.inputs.limit == '' || github.event.inputs.limit == null
         run: python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs
+      - name: Dane strony (gałąź dane-strony – zawsze tylko najnowsza wersja)
+        if: github.event.inputs.limit == '' || github.event.inputs.limit == null
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf /tmp/strona && mkdir /tmp/strona && cp docs/dane.enc docs/raport.enc docs/stan.json /tmp/strona/
+          cd /tmp/strona && git init -q -b dane-strony
+          git config user.name "nocny-odczyt" && git config user.email "actions@users.noreply.github.com"
+          git add . && git commit -qm "Dane $(date +'%Y-%m-%d %H:%M')"
+          for i in 1 2 3 4 5; do
+            git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" dane-strony && exit 0
+            echo "Zapis nieudany, próba $i"; sleep $((i * 20))
+          done
+          exit 1
       - name: Zapis do repozytorium
         run: |
+          git checkout -- docs 2>/dev/null || true
           git config user.name "nocny-odczyt"
           git config user.email "actions@users.noreply.github.com"
-          git add docs dane/url_map.json dane/lm_wspolrzedne_miast.json 2>/dev/null || git add docs
+          git add dane/url_map.json dane/lm_wspolrzedne_miast.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Odczyt $(date +'%Y-%m-%d %H:%M')"
           for i in 1 2 3 4 5; do   # GitHub czasem chwilowo odrzuca zapis – ponawiamy
             git pull --rebase -q origin main && git push && exit 0

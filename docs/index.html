@@ -165,8 +165,13 @@ const store = { get(k){ try{return sessionStorage.getItem(k)}catch(e){return nul
                 set(k,v){ try{sessionStorage.setItem(k,v)}catch(e){} } };
 const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 
+const DATA_BASE = "https://raw.githubusercontent.com/Rafikow1/paradyz-stany/dane-strony/";
+async function getData(name){   // najnowsze dane z gałęzi dane-strony; zapasowo – kopia obok strony
+  try { const r = await fetch(DATA_BASE + name + "?t=" + Date.now(), {cache:"no-store"}); if(r.ok) return r; } catch(e){}
+  return fetch(name + "?t=" + Date.now());
+}
 async function decrypt(url, pw){
-  const r = await fetch(url + "?t=" + Date.now());
+  const r = await getData(url);
   if(!r.ok) throw new Error("Brak danych na serwerze (" + r.status + ")");
   const d = await r.json();
   const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(pw), "PBKDF2", false, ["deriveKey"]);
@@ -331,7 +336,7 @@ async function downloadXlsx(){
 }
 
 $("loginForm").addEventListener("submit", e => { e.preventDefault(); login($("pw").value); });
-fetch("stan.json?t=" + Date.now()).then(r => r.ok ? r.json() : null).then(s => {
+getData("stan.json").then(r => r.ok ? r.json() : null).then(s => {
   if(s) $("lastUpdate").textContent = "Ostatni odczyt: " + s.generated + " · Leroy Merlin, Castorama, OBI";
 }).catch(()=>{});
 const saved = store.get("pw"); if(saved) login(saved);
