@@ -34,6 +34,30 @@ def keep_previous(rows: list[dict]) -> list[dict]:
     prev = prev.astype(object).where(prev.notna(), None)
     # "nie znaleziono" dziś, a wcześniej był odczyt – to raczej kaprys wyszukiwarki, zostawiamy stary stan
     good_now = {(r.get("Market"), str(r.get("EAN"))) for r in rows if r.get("Status") == "OK"}
+    # Podejrzany odczyt: dziś 0 we WSZYSTKICH sklepach, a niedawno (≤2 dni) towar był w wielu sklepach.
+    # Tyle towaru nie znika w jedną noc – to chwilowy błąd strony sieci, więc pokazujemy poprzedni stan.
+    def num(v):
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return None
+    now_q, prev_q = {}, {}
+    for r in rows:
+        if r.get("Status") == "OK" and num(r.get("Stan_Magazynowy")) is not None:
+            now_q.setdefault((r.get("Market"), str(r.get("EAN"))), []).append(num(r.get("Stan_Magazynowy")))
+    recent = (date.today() - timedelta(days=2)).isoformat()
+    for r in prev.to_dict("records"):
+        if r.get("Status") == "OK" and num(r.get("Stan_Magazynowy")) is not None \
+                and str(r.get("Data_Odczytu") or "")[:10] >= recent:
+            prev_q.setdefault((r.get("Market"), str(r.get("EAN"))), []).append(num(r.get("Stan_Magazynowy")))
+    suspicious = set()
+    for k, qs in now_q.items():
+        p = prev_q.get(k, [])
+        if len(qs) >= 5 and not any(qs) and sum(1 for q in p if q > 0) >= 5 and sum(p) >= 50:
+            suspicious.add(k)
+    if suspicious:
+        print(f"Podejrzane odczyty (0 wszędzie, wcześniej towar): {len(suspicious)} produktów -> poprzedni stan")
+        good_now -= suspicious
     seen_now = {(r.get("Market"), str(r.get("EAN"))) for r in rows}
     markets_now = {r.get("Market") for r in rows}
     kept = []
@@ -41,7 +65,8 @@ def keep_previous(rows: list[dict]) -> list[dict]:
         key = (r.get("Market"), str(r.get("EAN")))
         fresh = str(r.get("Data_Odczytu") or "")[:10] >= (date.today() - timedelta(days=14)).isoformat()
         if r.get("Status") == "OK" and key not in good_now and fresh:   # stan starszy niż 14 dni już nie wraca
-            r["Uwagi_Programu"] = f"stan z poprzedniego odczytu ({str(r.get('Data_Odczytu'))[:10]})"
+            r["Uwagi_Programu"] = f"stan z poprzedniego odczytu ({str(r.get('Data_Odczytu'))[:10]})" + (
+                " – dziś sieć pokazała 0 we wszystkich sklepach (podejrzany odczyt)" if key in suspicious else "")
             kept.append(r)
     restored = {(r.get("Market"), str(r.get("EAN"))) for r in kept}
     rows = [r for r in rows if (r.get("Market"), str(r.get("EAN"))) not in restored] + kept

@@ -102,6 +102,11 @@ def checkpoint(rows: list[dict], cfg: dict, log):
         log.warning("Zapis częściowy nie powiódł się: %s", e)
 
 
+def all_zero(res) -> bool:
+    qs = [r.stock for r in res if isinstance(r.stock, (int, float))]
+    return len(qs) >= 5 and not any(qs)
+
+
 async def run_market(key: str, products: list[dict], cfg: dict, cache: UrlCache, args, rows: list[dict], log):
     mcfg = cfg["markets"][key]
     sig = cfg.get("signals", {})
@@ -127,7 +132,15 @@ async def run_market(key: str, products: list[dict], cfg: dict, cache: UrlCache,
                         url = await scraper.discover(product, force=args.od_nowa)
                         rows.append(make_row(product, name, StockResult("—", None, None, url, note="discovery")))
                     else:
-                        for r in await scraper.check(product, force_discover=args.od_nowa):
+                        res = await scraper.check(product, force_discover=args.od_nowa)
+                        if all_zero(res):   # 0 we wszystkich sklepach naraz – zwykle chwilowy błąd sklepu
+                            scraper.log.warning("%s: 0 we wszystkich sklepach – sprawdzam ponownie", ean)
+                            await asyncio.sleep(random.uniform(60, 120))
+                            res = await scraper.check(product)
+                            if all_zero(res):
+                                for r in res:
+                                    r.note = ((r.note or "") + " | 0 we wszystkich sklepach (2x)").strip(" |")
+                        for r in res:
                             rows.append(make_row(product, name, r, sig))
                     scraper.log.info("[%d/%d] %s OK", i, len(products), ean)
                 except BurnedIP as e:
