@@ -253,12 +253,12 @@
   "5902610588143": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T12:31:49"
+   "updated_at": "2026-11-06T07:05:23"
   },
   "5900139010343": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T12:33:00"
+   "updated_at": "2026-11-06T07:06:11"
   },
   "5900139010213": {
    "status": "FOUND",
@@ -269,7 +269,7 @@
   "5900139010367": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T12:34:31"
+   "updated_at": "2026-11-06T07:07:37"
   },
   "5900139010244": {
    "status": "FOUND",
@@ -328,7 +328,7 @@
   "5900144054196": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T12:38:39"
+   "updated_at": "2026-11-06T07:11:34"
   },
   "5900139032703": {
    "status": "FOUND",
@@ -411,14 +411,16 @@
    "name": "CHROMATIC GRAFIT COKÓŁ MAT. 7,2X59,8 G1"
   },
   "5900144080959": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:28:58"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144080959_CAPL.prd",
+   "updated_at": "2026-11-06T07:06:01",
+   "name": "CHROMATIC GRYS COKÓŁ MAT. 7,2X59,8 G1"
   },
   "5902610531033": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:27:07"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5902610531033_CAPL.prd",
+   "updated_at": "2026-11-06T07:05:04",
+   "name": "CRISTONI CREMA ŚCIANA REKT. MAT 29,8X59,8 G1"
   },
   "5902610511523": {
    "status": "FOUND",
@@ -439,14 +441,16 @@
    "name": "EXPEDITION GRYS PODŁOGA STRUKTURA 40X40 G1"
   },
   "5900139033083": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:28:34"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139033083_CAPL.prd",
+   "updated_at": "2026-11-06T07:06:09",
+   "name": "EXPEDITION KHAKI PODŁOGA STRUKTURA 40X40 G1"
   },
   "5900139033106": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:27:31"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900139033106_CAPL.prd",
+   "updated_at": "2026-11-06T07:06:16",
+   "name": "EXPEDITION RUST PODŁOGA STRUKTURA 40X40 G1"
   },
   "5900144007772": {
    "status": "FOUND",
@@ -455,14 +459,16 @@
    "name": "KALAHARI RUST INSERTO A 25X75 G1"
   },
   "5900144007796": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:28:20"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144007796_CAPL.prd",
+   "updated_at": "2026-11-06T07:15:56",
+   "name": "KALAHARI RUST INSERTO B 25X75 G1"
   },
   "5900144007826": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:27:37"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5900144007826_CAPL.prd",
+   "updated_at": "2026-11-06T07:06:06",
+   "name": "KALAHARI RUST INSERTO C 25X75 G1"
   },
   "5902610514036": {
    "status": "FOUND",
@@ -473,7 +479,7 @@
   "5904584184895": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:29:35"
+   "updated_at": "2026-11-06T07:08:29"
   },
   "5900144047532": {
    "status": "FOUND",
@@ -520,22 +526,22 @@
   "5063022581648": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:31:08"
+   "updated_at": "2026-11-06T07:09:05"
   },
   "5063022581686": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:31:07"
+   "updated_at": "2026-11-06T07:09:41"
   },
   "5063022581402": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:29:55"
+   "updated_at": "2026-11-06T07:20:15"
   },
   "5063022581549": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:27:24"
+   "updated_at": "2026-11-06T07:10:02"
   },
   "5900139030464": {
    "status": "FOUND",
@@ -552,7 +558,7 @@
   "5900139030488": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:30:50"
+   "updated_at": "2026-11-06T07:10:45"
   },
   "5900139032468": {
    "status": "FOUND",
@@ -569,7 +575,7 @@
   "5063022656155": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:32:19"
+   "updated_at": "2026-11-06T07:22:49"
   },
   "5063022581655": {
    "status": "FOUND",
@@ -580,7 +586,7 @@
   "5063022581228": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:32:57"
+   "updated_at": "2026-11-06T07:22:03"
   },
   "5063022581426": {
    "status": "FOUND",
@@ -591,7 +597,7 @@
   "5063022581242": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:25:59"
+   "updated_at": "2026-11-06T07:04:45"
   },
   "5063022581211": {
    "status": "FOUND",
@@ -602,7 +608,7 @@
   "5063022581198": {
    "status": "NOT_FOUND",
    "url": "",
-   "updated_at": "2026-11-04T08:25:43"
+   "updated_at": "2026-11-06T07:04:39"
   },
   "5904584158629": {
    "status": "FOUND",
@@ -617,9 +623,10 @@
    "name": "TIXXIS GRAFIT STEP 30X30 G1"
   },
   "5063022711939": {
-   "status": "NOT_FOUND",
-   "url": "",
-   "updated_at": "2026-11-04T08:26:23"
+   "status": "FOUND",
+   "url": "https://www.castorama.pl/p/5063022711939_CAPL.prd",
+   "updated_at": "2026-11-06T07:16:12",
+   "name": "TIXXIS GRAFIT STEP 30X60 G1"
   },
   "5902610530975": {
    "status": "FOUND",
