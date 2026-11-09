@@ -105,6 +105,7 @@ jobs:
           mkdir -p data
           cp dane/url_map.json data/url_map.json 2>/dev/null || true
           cp dane/lm_wspolrzedne_miast.json data/lm_wspolrzedne_miast.json 2>/dev/null || true
+          cp dane/castorama_sklepy.json data/castorama_sklepy.json 2>/dev/null || true
       - name: Odczyt sklepów
         if: steps.prep.outputs.skip != '1'
         continue-on-error: true
@@ -190,6 +191,7 @@ jobs:
           mkdir -p data output
           cp dane/url_map.json data/url_map.json 2>/dev/null || true
           cp dane/lm_wspolrzedne_miast.json data/lm_wspolrzedne_miast.json 2>/dev/null || true
+          cp dane/castorama_sklepy.json data/castorama_sklepy.json 2>/dev/null || true
           python -m utils.pack_result restore poprzedni output
           xvfb-run -a python main.py --input input.xlsx --rynki ${{ matrix.siec }} --czesc ${{ matrix.czesc }} --dokoncz --limit-czasu 60
       - name: Wyniki (zaszyfrowane)
@@ -230,6 +232,7 @@ jobs:
           python -m utils.merge wyniki output
           LM=$(find wyniki -name lm_wspolrzedne_miast.json | head -1); [ -n "$LM" ] && cp "$LM" dane/lm_wspolrzedne_miast.json || true
           cp data/url_map.json dane/url_map.json
+          CS=$(find wyniki -name castorama_sklepy.json -size +2k | head -1); [ -n "$CS" ] && cp "$CS" dane/castorama_sklepy.json || true
       - name: Publikacja na stronie
         if: github.event.inputs.limit == '' || github.event.inputs.limit == null
         run: python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs
@@ -252,7 +255,7 @@ jobs:
           git checkout -- docs 2>/dev/null || true
           git config user.name "nocny-odczyt"
           git config user.email "actions@users.noreply.github.com"
-          git add dane/url_map.json dane/lm_wspolrzedne_miast.json 2>/dev/null || true
+          git add dane/url_map.json dane/lm_wspolrzedne_miast.json dane/castorama_sklepy.json 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Odczyt $(date +'%Y-%m-%d %H:%M')"
           for i in 1 2 3 4 5; do   # GitHub czasem chwilowo odrzuca zapis – ponawiamy
             git pull --rebase -q origin main && git push && exit 0

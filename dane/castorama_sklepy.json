@@ -1,0 +1,442 @@
+{
+ "1521": {
+  "name": "Castorama Łódź 2 Zgierska",
+  "pc": "00-001"
+ },
+ "1522": {
+  "name": "Castorama Łódź 3 Widzew",
+  "pc": "00-001"
+ },
+ "1520": {
+  "name": "Castorama Łódź 1 Piekarnia",
+  "pc": "00-001"
+ },
+ "1694": {
+  "name": "Castorama Pabianice",
+  "pc": "00-001"
+ },
+ "1525": {
+  "name": "Castorama Skierniewice",
+  "pc": "00-001"
+ },
+ "2795": {
+  "name": "Castorama Płock",
+  "pc": "00-001"
+ },
+ "1609": {
+  "name": "Castorama Włocławek",
+  "pc": "00-001"
+ },
+ "1606": {
+  "name": "Castorama Piotrków Trybunalski",
+  "pc": "00-001"
+ },
+ "1519": {
+  "name": "Castorama Konin - Stare Miasto",
+  "pc": "00-001"
+ },
+ "2864": {
+  "name": "Castorama Express Warszawa Ursus",
+  "pc": "00-001"
+ },
+ "2798": {
+  "name": "Castorama Smart Grójec",
+  "pc": "00-001"
+ },
+ "1591": {
+  "name": "Castorama Warszawa 3 Krakowska",
+  "pc": "00-001"
+ },
+ "1589": {
+  "name": "Castorama Warszawa 1 Popularna",
+  "pc": "00-001"
+ },
+ "2615": {
+  "name": "Castorama Łomianki",
+  "pc": "00-001"
+ },
+ "1593": {
+  "name": "Castorama Warszawa 5 Wola",
+  "pc": "00-001"
+ },
+ "1518": {
+  "name": "Castorama Kalisz",
+  "pc": "00-001"
+ },
+ "2794": {
+  "name": "Castorama Piaseczno",
+  "pc": "00-001"
+ },
+ "2796": {
+  "name": "Castorama Warszawa 6 Bartycka",
+  "pc": "00-001"
+ },
+ "1590": {
+  "name": "Castorama Warszawa 2 Targówek",
+  "pc": "00-001"
+ },
+ "1592": {
+  "name": "Castorama Warszawa 4 Grochowska",
+  "pc": "00-001"
+ },
+ "1595": {
+  "name": "Castorama Ciechanów",
+  "pc": "00-001"
+ },
+ "2512": {
+  "name": "Castorama Otwock",
+  "pc": "00-001"
+ },
+ "1576": {
+  "name": "Castorama Brico Depot Toruń",
+  "pc": "00-001"
+ },
+ "1584": {
+  "name": "Castorama Toruń",
+  "pc": "00-001"
+ },
+ "2797": {
+  "name": "Castorama Smart Mława",
+  "pc": "00-001"
+ },
+ "1524": {
+  "name": "Castorama Radom",
+  "pc": "00-001"
+ },
+ "1588": {
+  "name": "Castorama Mińsk Mazowiecki",
+  "pc": "00-001"
+ },
+ "3009": {
+  "name": "Castorama Gniezno 2",
+  "pc": "00-001"
+ },
+ "1517": {
+  "name": "Castorama Częstochowa",
+  "pc": "00-001"
+ },
+ "1573": {
+  "name": "Castorama Skarżysko-Kamienna",
+  "pc": "00-001"
+ },
+ "1594": {
+  "name": "Castorama Bydgoszcz 2 Szajnochy",
+  "pc": "00-001"
+ },
+ "1577": {
+  "name": "Castorama Bydgoszcz 1 Szubińska",
+  "pc": "00-001"
+ },
+ "1568": {
+  "name": "Castorama Kielce",
+  "pc": "00-001"
+ },
+ "1597": {
+  "name": "Castorama Grudziądz",
+  "pc": "00-001"
+ },
+ "1551": {
+  "name": "Castorama Swarzędz",
+  "pc": "00-001"
+ },
+ "3068": {
+  "name": "Castorama Zawiercie",
+  "pc": "00-001"
+ },
+ "1547": {
+  "name": "Castorama Poznań 1 Murawa",
+  "pc": "00-001"
+ },
+ "1570": {
+  "name": "Castorama Ostrowiec Świętokrzyski",
+  "pc": "00-001"
+ },
+ "1548": {
+  "name": "Castorama Poznań 2 Komorniki",
+  "pc": "00-001"
+ },
+ "3032": {
+  "name": "Castorama Ostróda",
+  "pc": "00-001"
+ },
+ "1565": {
+  "name": "Castorama Tarnowskie Góry",
+  "pc": "00-001"
+ },
+ "1566": {
+  "name": "Castorama Puławy",
+  "pc": "00-001"
+ },
+ "1523": {
+  "name": "Castorama Opole",
+  "pc": "00-001"
+ },
+ "1690": {
+  "name": "Castorama Siedlce",
+  "pc": "00-001"
+ },
+ "1541": {
+  "name": "Castorama Wrocław 2 Korona",
+  "pc": "00-001"
+ },
+ "1564": {
+  "name": "Castorama Sosnowiec",
+  "pc": "00-001"
+ },
+ "1556": {
+  "name": "Castorama Bytom",
+  "pc": "00-001"
+ },
+ "2923": {
+  "name": "Castorama Smart Olkusz",
+  "pc": "00-001"
+ },
+ "1546": {
+  "name": "Castorama Leszno",
+  "pc": "00-001"
+ },
+ "2616": {
+  "name": "Castorama Olsztyn",
+  "pc": "00-001"
+ },
+ "1559": {
+  "name": "Castorama Katowice",
+  "pc": "00-001"
+ },
+ "1557": {
+  "name": "Castorama Chorzów",
+  "pc": "00-001"
+ },
+ "1543": {
+  "name": "Castorama Wrocław 4 Magnolia",
+  "pc": "00-001"
+ },
+ "2607": {
+  "name": "Castorama Ruda Śląska",
+  "pc": "00-001"
+ },
+ "1542": {
+  "name": "Castorama Wrocław 3 Graniczna",
+  "pc": "00-001"
+ },
+ "1558": {
+  "name": "Castorama Gliwice",
+  "pc": "00-001"
+ },
+ "1540": {
+  "name": "Castorama Wrocław 1 Bielany",
+  "pc": "00-001"
+ },
+ "1560": {
+  "name": "Castorama Kędzierzyn-Koźle",
+  "pc": "00-001"
+ },
+ "1603": {
+  "name": "Castorama Smart Łomża",
+  "pc": "00-001"
+ },
+ "3101": {
+  "name": "Castorama Chrzanów",
+  "pc": "00-001"
+ },
+ "1693": {
+  "name": "Castorama Piła",
+  "pc": "00-001"
+ },
+ "2608": {
+  "name": "Castorama Starogard Gdański",
+  "pc": "00-001"
+ },
+ "2606": {
+  "name": "Castorama Tychy",
+  "pc": "00-001"
+ },
+ "1531": {
+  "name": "Castorama Kraków 4 Bronowice",
+  "pc": "00-001"
+ },
+ "1530": {
+  "name": "Castorama Kraków 3 Pilotów",
+  "pc": "00-001"
+ },
+ "1563": {
+  "name": "Castorama Rybnik",
+  "pc": "00-001"
+ },
+ "1533": {
+  "name": "Castorama Oświęcim",
+  "pc": "00-001"
+ },
+ "1529": {
+  "name": "Castorama Kraków 2 Podgórze",
+  "pc": "00-001"
+ },
+ "1528": {
+  "name": "Castorama Kraków 1 Zakopianka",
+  "pc": "00-001"
+ },
+ "1596": {
+  "name": "Castorama Elbląg",
+  "pc": "00-001"
+ },
+ "1534": {
+  "name": "Castorama Żory",
+  "pc": "00-001"
+ },
+ "1561": {
+  "name": "Castorama Nysa",
+  "pc": "00-001"
+ },
+ "1569": {
+  "name": "Castorama Lublin",
+  "pc": "00-001"
+ },
+ "1562": {
+  "name": "Castorama Racibórz",
+  "pc": "00-001"
+ },
+ "1538": {
+  "name": "Castorama Lubin",
+  "pc": "00-001"
+ },
+ "1535": {
+  "name": "Castorama Głogów",
+  "pc": "00-001"
+ },
+ "2793": {
+  "name": "Castorama Stalowa Wola",
+  "pc": "00-001"
+ },
+ "1526": {
+  "name": "Castorama Bielsko-Biała",
+  "pc": "00-001"
+ },
+ "1537": {
+  "name": "Castorama Legnica",
+  "pc": "00-001"
+ },
+ "1574": {
+  "name": "Castorama Tarnów",
+  "pc": "00-001"
+ },
+ "2926": {
+  "name": "Castorama Biała Podlaska",
+  "pc": "00-001"
+ },
+ "3004": {
+  "name": "Castorama Gdańsk 3 Kowale",
+  "pc": "00-001"
+ },
+ "1539": {
+  "name": "Castorama Wałbrzych",
+  "pc": "00-001"
+ },
+ "1527": {
+  "name": "Castorama Cieszyn",
+  "pc": "00-001"
+ },
+ "3110": {
+  "name": "Castorama Żywiec",
+  "pc": "00-001"
+ },
+ "1579": {
+  "name": "Castorama Gdańsk 2 Oliwa",
+  "pc": "00-001"
+ },
+ "2840": {
+  "name": "Castorama Kłodzko",
+  "pc": "00-001"
+ },
+ "1578": {
+  "name": "Castorama Gdańsk 1 Osowa",
+  "pc": "00-001"
+ },
+ "1585": {
+  "name": "Castorama Białystok",
+  "pc": "00-001"
+ },
+ "1555": {
+  "name": "Castorama Zielona Góra",
+  "pc": "00-001"
+ },
+ "1587": {
+  "name": "Castorama Ełk",
+  "pc": "00-001"
+ },
+ "1582": {
+  "name": "Castorama Rumia",
+  "pc": "00-001"
+ },
+ "2513": {
+  "name": "Castorama Nowy Sącz",
+  "pc": "00-001"
+ },
+ "2711": {
+  "name": "Castorama Rzeszów",
+  "pc": "00-001"
+ },
+ "1536": {
+  "name": "Castorama Jelenia Góra",
+  "pc": "00-001"
+ },
+ "1532": {
+  "name": "Castorama Nowy Targ",
+  "pc": "00-001"
+ },
+ "1567": {
+  "name": "Castorama Chełm",
+  "pc": "00-001"
+ },
+ "1545": {
+  "name": "Castorama Gorzów",
+  "pc": "00-001"
+ },
+ "1575": {
+  "name": "Castorama Zamość",
+  "pc": "00-001"
+ },
+ "2617": {
+  "name": "Castorama Żary",
+  "pc": "00-001"
+ },
+ "1583": {
+  "name": "Castorama Słupsk",
+  "pc": "00-001"
+ },
+ "1581": {
+  "name": "Castorama Koszalin",
+  "pc": "00-001"
+ },
+ "2748": {
+  "name": "Castorama Stargard",
+  "pc": "00-001"
+ },
+ "1554": {
+  "name": "Castorama Szczecin 3 Struga",
+  "pc": "00-001"
+ },
+ "2801": {
+  "name": "Castorama Smart Augustów",
+  "pc": "00-001"
+ },
+ "1552": {
+  "name": "Castorama Szczecin 1 Ku Słońcu",
+  "pc": "00-001"
+ },
+ "1553": {
+  "name": "Castorama Szczecin 2 Południowa",
+  "pc": "00-001"
+ },
+ "2747": {
+  "name": "Castorama Smart Świnoujście",
+  "pc": "00-001"
+ },
+ "1544": {
+  "name": "Castorama Zgorzelec",
+  "pc": "00-001"
+ },
+ "1571": {
+  "name": "Castorama Przemyśl",
+  "pc": "00-001"
+ }
+}

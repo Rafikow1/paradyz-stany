@@ -19,7 +19,7 @@ def pack(out_dir: Path):
     out_dir.mkdir(exist_ok=True)
     for f in Path("output").glob("stany_magazynowe_2*.xlsx"):
         (out_dir / (f.name + ".enc")).write_bytes(encrypt_bytes(f.read_bytes(), pw))
-    for name in ("url_map.json", "lm_wspolrzedne_miast.json"):
+    for name in ("url_map.json", "lm_wspolrzedne_miast.json", "castorama_sklepy.json"):
         if (Path("data") / name).exists():
             shutil.copy(Path("data") / name, out_dir / name)
     with zipfile.ZipFile("dziennik.zip", "w", zipfile.ZIP_DEFLATED) as z:

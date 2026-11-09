@@ -10,6 +10,8 @@ Uwaga: produkty marki własnej Kingfisher (EAN 5063022…/5036581…, np. DOBRA,
 są sprzedawane pod nazwami Castoramy – szukamy po EAN.
 """
 import asyncio
+import json
+from pathlib import Path
 from urllib.parse import quote
 
 from playwright.async_api import Error as PWError
@@ -23,6 +25,7 @@ FULFIL_API = ("https://www.castorama.pl/castopl-browse-mfe/api/fulfilment-option
               "?compositeOfferId={ean}&storeId={ids}&postalCode={pc}")
 # punkty, z których szukamy sklepów (centrum + 4 regiony), żeby objąć całą Polskę
 SEARCH_POINTS = [(52.07, 19.48), (54.35, 18.65), (50.06, 19.94), (52.23, 21.01), (51.11, 17.03), (53.43, 14.55)]
+STORES_FILE = Path("data/castorama_sklepy.json")   # zapasowa lista sklepów (API listy czasem odpowiada 401)
 SKIP_HEADERS = {"host", "content-length", "user-agent", "cookie", "referer", "origin", "accept-encoding",
                 "connection", "accept-language"}
 
@@ -80,6 +83,20 @@ class CastoramaScraper(BaseScraper):
                 st = d.get("attributes", {}).get("store", {})
                 pc = _find_postcode(st) or "00-001"
                 stores[str(d.get("id"))] = {"name": st.get("name", d.get("id")), "pc": pc}
+        if len(stores) >= 80:   # pełna lista – zapamiętujemy na wypadek awarii API
+            try:
+                STORES_FILE.parent.mkdir(parents=True, exist_ok=True)
+                STORES_FILE.write_text(json.dumps(stores, ensure_ascii=False, indent=1), encoding="utf-8")
+            except OSError:
+                pass
+        elif STORES_FILE.exists():   # API listy sklepów nie odpowiedziało – bierzemy zapamiętaną listę
+            try:
+                saved = json.loads(STORES_FILE.read_text(encoding="utf-8"))
+                for sid, st in saved.items():
+                    stores.setdefault(sid, st)
+                self.log.warning("Castorama: lista sklepów z API niepełna – używam zapamiętanej (%d sklepów)", len(saved))
+            except (OSError, ValueError):
+                pass
         # zapasowo: sklepy, które strona sama pobrała (np. najbliższe 10)
         if not stores:
             for c in self._captured:
@@ -114,8 +131,8 @@ class CastoramaScraper(BaseScraper):
 
     async def all_stores_stock(self, product, info, url):
         stores = await self.load_stores()
-        if not stores:
-            return []
+        if not stores:   # bez listy sklepów nie zapisujemy "OK" – produkt pójdzie do ponownego odczytu
+            raise ScraperError("Castorama: brak listy sklepów – stany w sklepach nieodczytane")
         ean = product["EAN"]
         ids = list(stores)
 
