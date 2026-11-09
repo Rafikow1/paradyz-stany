@@ -286,6 +286,7 @@ function pill(r){
   if(r._L === "ok") return `<span class="pill p-grn">OK</span>`;
   if(r.st === "NIE_ZNALEZIONO") return `<span class="pill p-amb">Brak w ofercie online sieci</span>`;
   if(r.q === "Poza asortymentem") return `<span class="pill">Poza asortymentem</span>`;
+  if(r.q === "Na zamówienie") return `<span class="pill">Tylko na zamówienie</span>`;
   if(r.q === "Dostępny") return `<span class="pill p-grn">Dostępny online</span>`;
   if(r.q === "Niedostępny") return `<span class="pill p-red">Niedostępny online</span>`;
   return "";

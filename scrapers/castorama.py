@@ -153,7 +153,13 @@ class CastoramaScraper(BaseScraper):
             for i in range(0, len(ids), par):
                 part = ids[i:i + par]
                 urls = [FULFIL_API.format(ean=ean, ids=quote(sid), pc=stores[sid]["pc"]) for sid in part]
-                for sid, data in zip(part, await self.browser_fetch_json_many(urls)):
+                answers = await self.browser_fetch_json_many(urls)
+                if not all(answers):   # pojedyncze zapytania czasem nie przechodzą – ponawiamy raz
+                    await asyncio.sleep(3)
+                    retry = await self.browser_fetch_json_many([u for u, a in zip(urls, answers) if not a])
+                    it = iter(retry)
+                    answers = [a or next(it) for a in answers]
+                for sid, data in zip(part, answers):
                     if not data:
                         results[sid] = (None, "błąd zapytania")
                         continue
@@ -165,7 +171,10 @@ class CastoramaScraper(BaseScraper):
         for sid in ids:
             q, av = results.get(sid, (None, None))
             label = f"{sid} / {stores[sid]['name']}"
-            if q is None and av == "NotStockedInStore":
+            if q is None and av == "NotStockable":   # sieć nie trzyma tego w sklepach – tylko na zamówienie
+                out.append(StockResult(label, "Na zamówienie", info.price, url,
+                                       note="produkt nie jest magazynowany w sklepach"))
+            elif q is None and av == "NotStockedInStore":
                 out.append(StockResult(label, "Poza asortymentem", info.price, url,
                                        note="sklep nie ma tego produktu w ofercie"))
             else:
