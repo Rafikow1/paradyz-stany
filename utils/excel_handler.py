@@ -31,7 +31,7 @@ COLUMN_ALIASES = {
 MARKET_KEYS = {"leroy merlin": "leroy", "leroy": "leroy", "castorama": "castorama", "obi": "obi"}
 
 REPORT_COLUMNS = [
-    "EAN", "Indeks_Producenta", "Nazwa_Produktu", "Market", "Region", "ID_Sklepu_Fizycznego / Nazwa_Miasta",
+    "EAN", "Indeks_Producenta", "Nazwa_Produktu", "Market", "Region", "Gama", "ID_Sklepu_Fizycznego / Nazwa_Miasta",
     "Stan_Magazynowy", "Stan_Sklep_m2", "Sygnal",
     "Stan_Paradyz", "JM", "Data_Stanu_Paradyz", "Uwagi_Paradyz",
     "Cena_za_m2", "Cena_za_opakowanie", "m2_w_opakowaniu",
@@ -116,13 +116,26 @@ def write_report(rows: list[dict], output_dir: str | Path, run_date: date | None
         df["Region"] = [region(m, st) for m, st in zip(df["Market"], df["ID_Sklepu_Fizycznego / Nazwa_Miasta"])]
     except Exception:
         pass
+    hide = pd.Series(False, index=df.index)
+    try:
+        from utils import gamy
+        infos = [gamy.info(m, e, n, st) for m, e, n, st in zip(df["Market"], df["EAN"], df["Nazwa_Produktu"],
+                                                               df["ID_Sklepu_Fizycznego / Nazwa_Miasta"])]
+        df["Gama"] = [i["gama"] for i in infos]
+        df["ID_Sklepu_Fizycznego / Nazwa_Miasta"] = [f"{st} (HUB)" if i["hub"] and "(HUB)" not in str(st) else st
+                                                     for st, i in zip(df["ID_Sklepu_Fizycznego / Nazwa_Miasta"], infos)]
+        hide = pd.Series([gamy.hidden_by_default(m, e, n, st, q) for m, e, n, st, q in zip(
+            df["Market"], df["EAN"], df["Nazwa_Produktu"], df["ID_Sklepu_Fizycznego / Nazwa_Miasta"],
+            df["Stan_Magazynowy"])], index=df.index)
+    except Exception as e:
+        log.warning("Gamy niedostępne: %s", e)
     df["Stan_Paradyz"] = pd.to_numeric(df["Stan_Paradyz"], errors="coerce").round(2)
 
     summary = (df.assign(n=1).pivot_table(index="Market", columns="Status", values="n",
                                           aggfunc="sum", fill_value=0).reset_index()
                if not df.empty else pd.DataFrame())
     problems = df[df["Status"] != "OK"]
-    signals = df[df["Sygnal"].fillna("") != ""]
+    signals = df[(df["Sygnal"].fillna("") != "") & ~hide]   # bez nieobowiązkowych z zerem
 
     with pd.ExcelWriter(out, engine="openpyxl") as xw:
         df.to_excel(xw, sheet_name="Stany", index=False)

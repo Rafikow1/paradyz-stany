@@ -62,12 +62,20 @@ def build_site(report: Path, docs: Path, password: str) -> None:
     df = pd.read_excel(report, sheet_name="Stany", dtype={"EAN": str})
     df = df[df["Status"].isin(["OK", "NIE_ZNALEZIONO"]) | df["Status"].isna()]
     from utils.regions import region
+    from utils import gamy
     rows = []
     for r in df.to_dict("records"):
         row = {}
         rg = region(r.get("Market"), r.get("ID_Sklepu_Fizycznego / Nazwa_Miasta"))   # mapa jest źródłem prawdy
         if rg:
             row["rg"] = rg
+        g = gamy.info(r.get("Market"), r.get("EAN"), r.get("Nazwa_Produktu"), r.get("ID_Sklepu_Fizycznego / Nazwa_Miasta"))
+        if g["gama"]:
+            row["ga"] = g["gama"]
+        if g["nieobow"]:
+            row["nob"] = 1      # nieobowiązkowa / magazyn centralny – z zerem domyślnie ukryta
+        if g["hub"]:
+            row["hub"] = 1
         for col, k in SITE_COLS:
             v = r.get(col)
             if v is None or (isinstance(v, float) and v != v):

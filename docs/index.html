@@ -121,9 +121,11 @@ a{color:var(--accent)}
       <div style="grid-column:span 2">
         <label class="check"><input type="checkbox" id="fPar"> Tylko gdy Paradyż ma towar (min. <input id="fParMin" type="number" min="0" step="10" value="100" style="width:80px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg)"> m²/szt.)</label>
         <label class="check" style="padding-top:0"><input type="checkbox" id="fOnline"> Pokaż sklep internetowy</label>
+        <label class="check" style="padding-top:0"><input type="checkbox" id="fNob"> Pokaż wyższe gamy i magazyn centralny LM także przy stanie 0</label>
       </div>
     </div>
-    <p class="sub" style="margin:8px 2px 0">Niski stan liczony w m². Dla produktów bez przelicznika m² (np. inserta w szt.) – mniej niż 5 opakowań.</p>
+    <p class="sub" style="margin:8px 2px 0">Niski stan liczony w m². Dla produktów bez przelicznika m² (np. inserta w szt.) – mniej niż 5 opakowań.<br>
+      Pozycje nieobowiązkowe (Castorama: gamy powyżej A / A-, Leroy Merlin: towar z magazynu centralnego) widać tylko w sklepach, które je mają na stanie (np. huby) – chyba że zaznaczysz opcję powyżej.</p>
 
     <div class="stats">
       <div class="stat"><b id="sRows">0</b><span>pozycji</span></div>
@@ -227,7 +229,7 @@ function init(){
   markets.forEach(m => $("fMarket").add(new Option(m, m)));
   try { const t = localStorage.getItem("thr"); if(t) $("fThr").value = t; } catch(e){}
   fillStores();
-  ["fRegion","fMarket","fStore","fText","fLevel","fThr","fSort","fPar","fParMin","fOnline"].forEach(id =>
+  ["fRegion","fMarket","fStore","fText","fLevel","fThr","fSort","fPar","fParMin","fOnline","fNob"].forEach(id =>
     $(id).addEventListener("input", () => { if(id==="fMarket" || id==="fRegion") fillStores();
       if(id==="fRegion") { try{localStorage.setItem("region",$("fRegion").value)}catch(e){} } if(id==="fThr") { try{localStorage.setItem("thr",$("fThr").value)}catch(e){} } apply(); }));
   $("moreBtn").onclick = () => render(false);
@@ -245,13 +247,14 @@ function fillStores(){
 }
 function apply(){
   const m = $("fMarket").value, rg = $("fRegion").value, st = $("fStore").value, t = $("fText").value.trim().toLowerCase();
-  const lv = $("fLevel").value, online = $("fOnline").checked;
+  const lv = $("fLevel").value, online = $("fOnline").checked, nob = $("fNob").checked;
   const thr = parseFloat($("fThr").value) || 0, par = $("fPar").checked, parMin = parseFloat($("fParMin").value) || 0;
   view = DATA.rows.filter(r => {
     if(m && r.m !== m) return false;
     if(rg && r.rg !== rg) return false;
     if(st && (m ? r.s : r.m + " · " + r.s) !== st) return false;
     if(!online && r.s === "Sklep internetowy") return false;
+    if(!nob && r.nob && !(num(r.q) > 0)) return false;
     if(par && !(num(r.p) >= parMin)) return false;
     if(lv){ const L = level(r, thr);
       if(lv === "lowzero" && L !== "low" && L !== "zero") return false;
@@ -291,8 +294,8 @@ function render(reset){
   if(reset){ $("rows").innerHTML = ""; shown = 0; }
   const part = view.slice(shown, shown + PAGE);
   $("rows").insertAdjacentHTML("beforeend", part.map(r => `<tr>
-    <td>${esc(r.n)}<span class="idx">${esc(r.i)} · EAN ${esc(r.e)}</span></td>
-    <td data-l="Sklep">${esc(r.m)}${r.rg ? ` <span class="pill" style="background:var(--bg);border:1px solid var(--line);font-weight:500">${esc(r.rg)}</span>` : ""}<span class="idx">${esc(r.s)}</span>${r.d && String(r.d).slice(0,10) !== DATA.generated.slice(0,10) ? `<span class="idx" style="color:var(--amber)">stan z ${esc(String(r.d).slice(0,10))}</span>` : ""}</td>
+    <td>${esc(r.n)}${r.ga ? ` <span class="pill" style="background:var(--bg);border:1px solid var(--line);font-weight:500">${esc(r.ga)}</span>` : ""}<span class="idx">${esc(r.i)} · EAN ${esc(r.e)}</span></td>
+    <td data-l="Sklep">${esc(r.m)}${r.hub ? ` <span class="pill p-grn">HUB</span>` : ""}${r.rg ? ` <span class="pill" style="background:var(--bg);border:1px solid var(--line);font-weight:500">${esc(r.rg)}</span>` : ""}<span class="idx">${esc(r.s)}</span>${r.d && String(r.d).slice(0,10) !== DATA.generated.slice(0,10) ? `<span class="idx" style="color:var(--amber)">stan z ${esc(String(r.d).slice(0,10))}</span>` : ""}</td>
     <td class="num" data-l="Stan (opak.)">${num(r.q)!==null ? esc(fmt(r.q)) : ""}</td>
     <td class="num" data-l="Stan m²">${r._m2!=null ? esc(fmt(r._m2,2)) : ""}</td>
     <td>${pill(r)}</td>
@@ -320,8 +323,8 @@ function save(blob, name){
   document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 1000);
 }
 function downloadCsv(){
-  const head = ["Region","Sieć","Sklep","EAN","Indeks","Produkt","Stan (opak.)","Stan m2","Stan","Stan Paradyż","JM","Cena/m2","Link"];
-  const keys = ["rg","m","s","e","i","n","q","_m2","_Lpl","p","j","c","u"];
+  const head = ["Region","Sieć","Sklep","EAN","Indeks","Produkt","Gama","Stan (opak.)","Stan m2","Stan","Stan Paradyż","JM","Cena/m2","Link"];
+  const keys = ["rg","m","s","e","i","n","ga","q","_m2","_Lpl","p","j","c","u"];
   const LPL = {zero:"Brak", low:"Niski", ok:"OK"}; view.forEach(r => r._Lpl = LPL[r._L] || "");
   const q = v => { v = v==null ? "" : String(v); if(typeof v==="string" && /^\d+\.\d+$/.test(v)) v = v.replace(".",","); return /[;"\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
   const lines = [head.join(";")].concat(view.map(r => keys.map(k => q(typeof r[k]==="number" ? String(r[k]).replace(".",",") : r[k])).join(";")));
