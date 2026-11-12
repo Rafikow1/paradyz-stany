@@ -225,6 +225,7 @@ jobs:
         run: |
           if git fetch -q --depth 1 origin dane-strony; then
             mkdir -p docs && git show FETCH_HEAD:raport.enc > docs/raport.enc
+            git show FETCH_HEAD:historia.enc > docs/historia.enc 2>/dev/null || rm -f docs/historia.enc
           fi
       - name: Odszyfrowanie i scalenie
         run: |
@@ -233,6 +234,18 @@ jobs:
           LM=$(find wyniki -name lm_wspolrzedne_miast.json | head -1); [ -n "$LM" ] && cp "$LM" dane/lm_wspolrzedne_miast.json || true
           cp data/url_map.json dane/url_map.json
           CS=$(find wyniki -name castorama_sklepy.json -size +2k | head -1); [ -n "$CS" ] && cp "$CS" dane/castorama_sklepy.json || true
+      - name: Historia stanów i szacunek sprzedaży
+        continue-on-error: true    # błąd historii nie może zatrzymać strony; stary plik zostaje nienaruszony
+        run: |
+          mkdir -p docs
+          python -m utils.historia update docs/historia.enc wyniki docs/sprzedaz.enc
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historia
+          path: docs/historia.enc
+          retention-days: 90
+          if-no-files-found: ignore
       - name: Publikacja na stronie
         if: github.event.inputs.limit == '' || github.event.inputs.limit == null
         run: python -m utils.publish site output/stany_magazynowe_AKTUALNE.xlsx docs
@@ -242,6 +255,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           rm -rf /tmp/strona && mkdir /tmp/strona && cp docs/dane.enc docs/raport.enc docs/stan.json /tmp/strona/
+          for f in historia.enc sprzedaz.enc; do [ -s docs/$f ] && cp docs/$f /tmp/strona/; done
           cd /tmp/strona && git init -q -b dane-strony
           git config user.name "nocny-odczyt" && git config user.email "actions@users.noreply.github.com"
           git add . && git commit -qm "Dane $(date +'%Y-%m-%d %H:%M')"

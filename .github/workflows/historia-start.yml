@@ -1,0 +1,64 @@
+name: Historia – start (jednorazowo z zapisanych odczytów)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: nocny-odczyt
+  cancel-in-progress: false
+
+env:
+  DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
+  PYTHONUNBUFFERED: "1"
+  TZ: Europe/Warsaw
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Zebranie wszystkich zapisanych odczytów
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p raporty/git raporty/art
+          for c in $(git log --format=%h -- docs/raport.enc); do
+            git show $c:docs/raport.enc > r.enc && python -m utils.publish decrypt r.enc raporty/git/stany_magazynowe_2_$c.xlsx || true
+          done
+          for id in $(gh run list -R ${{ github.repository }} -L 200 --workflow nocny-odczyt.yml --json databaseId -q '.[].databaseId'); do
+            gh run download $id -R ${{ github.repository }} -D raporty/art/$id -p "wynik*" >/dev/null 2>&1 || true
+          done
+          for f in $(find raporty/art -name "stany_magazynowe_2*.xlsx.enc"); do python -m utils.publish decrypt "$f" "${f%.enc}" || true; done
+          git fetch -q --depth 1 origin dane-strony
+          mkdir -p strona && for f in dane.enc raport.enc stan.json historia.enc; do git show FETCH_HEAD:$f > strona/$f 2>/dev/null || rm -f strona/$f; done
+          python -m utils.publish decrypt strona/raport.enc raporty/git/stany_magazynowe_2_aktualny.xlsx
+          find raporty -name "*.xlsx" | wc -l
+      - name: Budowa historii
+        run: |
+          rm -f strona/historia.enc
+          python -m utils.historia update strona/historia.enc raporty strona/sprzedaz.enc
+      - uses: actions/upload-artifact@v4
+        with:
+          name: historia
+          path: strona/historia.enc
+          retention-days: 90
+      - name: Zapis do gałęzi dane-strony
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd strona && git init -q -b dane-strony
+          git config user.name "nocny-odczyt" && git config user.email "actions@users.noreply.github.com"
+          git add . && git commit -qm "Dane + historia $(date +'%Y-%m-%d %H:%M')"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" dane-strony
