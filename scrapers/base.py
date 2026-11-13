@@ -617,6 +617,7 @@ class BaseScraper:
 _NUM = r"(\d{1,5}(?:,\d{1,2})?)"
 # para "cena za m² … cena za opakowanie" bez innej ceny pomiędzy (LM, Castorama, OBI tak pokazują ceny płytek)
 _PAIR = re.compile(_NUM + r" ?zł ?(?:/|za) ?m[²2](?:(?!zł).){0,40}?" + _NUM + r" ?zł ?(?:/|za) ?opak")
+_PAIR_REV = re.compile(_NUM + r" ?zł ?(?:/|za) ?opak[a-z.]*(?:(?!zł).){0,40}?" + _NUM + r" ?zł ?(?:/|za) ?m[²2]")   # Castorama bywa odwrotnie
 
 
 def _f(v: str) -> float:
@@ -632,7 +633,7 @@ def parse_price_m2(text: str, price: float | None = None) -> float | None:
     """
     t = re.sub(r"\s+", " ", text or "")
     t = re.sub(r"(\d) ?, ?(\d)", r"\1,\2", t)
-    pairs = [(_f(a), _f(b)) for a, b in _PAIR.findall(t)]
+    pairs = [(_f(a), _f(b)) for a, b in _PAIR.findall(t)] + [(_f(b), _f(a)) for a, b in _PAIR_REV.findall(t)]
     if price:
         for m2, pack in pairs:
             if abs(pack - price) <= 0.02 and m2 > 0:
