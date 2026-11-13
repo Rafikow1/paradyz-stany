@@ -1,0 +1,34 @@
+name: Diagnoza cen
+
+on:
+  workflow_dispatch:
+
+env:
+  DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
+  PYTHONUNBUFFERED: "1"
+  TZ: Europe/Warsaw
+
+jobs:
+  diag:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - siec: leroy
+            eany: "3276007824339 3276007613469 3276007612868 5900139013672 3276007960198 3276007612851 5902610526701"
+          - siec: castorama
+            eany: "5902610530975 5904584158285 5063022638847 5036581057596 5904584184789"
+          - siec: obi
+            eany: "5900139030846 5904584158186 5902610560408 5900144058736 5900139030945"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt && python -m playwright install --with-deps chromium
+      - run: |
+          mkdir -p data && cp dane/url_map.json data/url_map.json
+          xvfb-run -a python -m utils.diag_ceny ${{ matrix.siec }} ${{ matrix.eany }}
