@@ -32,9 +32,10 @@ async def main(key, eans):
             offers = (info.raw_jsonld or {}).get("offers")
             print("JSON-LD price:", info.price, "| offers:", json.dumps(offers, ensure_ascii=False)[:400])
             print("WYNIK: cena opak.", info.price, "| cena m2", info.price_m2, "| m2 w opak.", info.m2_per_pack)
-            t = re.sub(r"\s+", " ", info.page_text or "")
-            for m in list(re.finditer(r"zł", t))[:0]:
-                print("   ...", t[max(0, m.start() - 70): m.end() + 25])
+            t = re.sub(r"(\d) ?, ?(\d)", r"\1,\2", re.sub(r"\s+", " ", info.page_text or ""))
+            ps = f"{info.price:.2f}".replace(".", ",") if info.price else "@@"
+            for m in list(re.finditer(re.escape(ps), t))[:6]:
+                print("   ...", t[max(0, m.start() - 150): m.end() + 80])
             for m in list(re.finditer(r"opak", t, re.I))[:0]:
                 print("   OPAK:", t[max(0, m.start() - 50): m.end() + 60])
             await asyncio.sleep(8)
