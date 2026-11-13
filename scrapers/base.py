@@ -343,7 +343,7 @@ class BaseScraper:
             info.page_text = await self.page.locator("body").inner_text(timeout=5000)
         except (PWTimeout, PWError):
             info.page_text = ""
-        info.price_m2 = parse_price_m2(info.page_text)
+        info.price_m2 = parse_price_m2(info.page_text, info.price)
         return info
 
     async def is_discontinued_page(self) -> bool:
@@ -614,12 +614,31 @@ class BaseScraper:
 
 
 # ======================================================== helpers
-def parse_price_m2(text: str) -> float | None:
-    """Cena za m² z tekstu strony, np. "90,98 zł / m²", "71\n,99 zł / m²", "79,\n99 zł / m2"."""
+_NUM = r"(\d{1,5}(?:,\d{1,2})?)"
+# para "cena za m² … cena za opakowanie" bez innej ceny pomiędzy (LM, Castorama, OBI tak pokazują ceny płytek)
+_PAIR = re.compile(_NUM + r" ?zł ?(?:/|za) ?m[²2](?:(?!zł).){0,40}?" + _NUM + r" ?zł ?(?:/|za) ?opak")
+
+
+def _f(v: str) -> float:
+    return float(v.replace(",", "."))
+
+
+def parse_price_m2(text: str, price: float | None = None) -> float | None:
+    """Cena za m² TEGO produktu.
+
+    Strona pokazuje też ceny innych produktów (polecane, "klienci oglądali"), więc nie bierzemy
+    pierwszej lepszej ceny za m², tylko tę z pary "X zł/m² … Y zł/opak.", w której Y to cena
+    produktu z danych strony (JSON-LD). Bez takiej pary – brak ceny za m² (lepiej pusto niż źle).
+    """
     t = re.sub(r"\s+", " ", text or "")
     t = re.sub(r"(\d) ?, ?(\d)", r"\1,\2", t)
-    m = re.search(r"(?<![\d,])(\d{1,5}),(\d{2}) ?zł ?/ ?m[²2]", t)
-    return float(f"{m.group(1)}.{m.group(2)}") if m else None
+    pairs = [(_f(a), _f(b)) for a, b in _PAIR.findall(t)]
+    if price:
+        for m2, pack in pairs:
+            if abs(pack - price) <= 0.02 and m2 > 0:
+                return m2
+        return None
+    return pairs[0][0] if pairs else None
 
 
 # ======================================================== JSON-LD helpers

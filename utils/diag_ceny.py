@@ -19,7 +19,7 @@ async def main(key, eans):
     async with SCRAPERS[key](cfg["general"], cfg["markets"][key], cache) as s:
         for ean in eans:
             e = cache.get(key, ean) or {}
-            url = e.get("url") or (s.direct_url(ean) if hasattr(s, "direct_url") else None)
+            url = e.get("url") or (await s.direct_url(ean) if hasattr(s, "direct_url") else None)
             print("\n" + "=" * 100 + f"\n{key} {ean} {e.get('name')}\n{url}")
             if not url:
                 continue
@@ -31,11 +31,11 @@ async def main(key, eans):
                 continue
             offers = (info.raw_jsonld or {}).get("offers")
             print("JSON-LD price:", info.price, "| offers:", json.dumps(offers, ensure_ascii=False)[:400])
-            print("parse_price_m2:", info.price_m2)
+            print("WYNIK: cena opak.", info.price, "| cena m2", info.price_m2, "| m2 w opak.", info.m2_per_pack)
             t = re.sub(r"\s+", " ", info.page_text or "")
-            for m in list(re.finditer(r"zł", t))[:40]:
+            for m in list(re.finditer(r"zł", t))[:0]:
                 print("   ...", t[max(0, m.start() - 70): m.end() + 25])
-            for m in list(re.finditer(r"opak|w paczce|m² w|m2 w|Zawartość|Ilość w", t, re.I))[:12]:
+            for m in list(re.finditer(r"opak", t, re.I))[:0]:
                 print("   OPAK:", t[max(0, m.start() - 50): m.end() + 60])
             await asyncio.sleep(8)
 
