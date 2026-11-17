@@ -13,6 +13,15 @@ from urllib.parse import urlencode, urlparse, parse_qs, urlunparse
 from scrapers import SCRAPERS
 from utils.common import UrlCache, load_config, setup_logging
 
+def pid(url: str, sku=None) -> str | None:
+    """Stały identyfikator produktu w sieci (LM: nr ref., OBI: nr art., Castorama: EAN)."""
+    for rx in (r"-(\d{6,})\.html", r"/p/(\d+)", r"/(\d{8,14})_CAPL"):
+        m = re.search(rx, url or "")
+        if m:
+            return m.group(1)
+    return str(sku) if sku else None
+
+
 PROD_RE = re.compile(r"/p/\d+|_CAPL\.prd|/produkty/[^?#]*-\d{6,}\.html")
 
 
@@ -55,16 +64,26 @@ async def read_page(s):
         off = p.get("offers") or {}
         off = off[0] if isinstance(off, list) and off else off
         br = p.get("brand")
+        br = br[0] if isinstance(br, list) and br else br
         items.append({"url": (p.get("url") or (off or {}).get("url") or "").split("?")[0], "n": p.get("name"),
                       "b": br.get("name") if isinstance(br, dict) else br,
-                      "c": (off or {}).get("price"), "e": p.get("gtin13") or p.get("gtin") or p.get("sku")})
+                      "c": (off or {}).get("price") or (off or {}).get("lowPrice"),
+                      "e": p.get("gtin13") or p.get("gtin") or p.get("sku"), "sku": p.get("sku")})
+    for i in items:
+        i["id"] = pid(i["url"], i.get("sku"))
     links = await s.page.eval_on_selector_all(
         "a[href]", "els => els.map(e => [e.href.split('?')[0].split('#')[0], (e.innerText||'').trim().slice(0,120)])")
-    seen = {i["url"] for i in items}
+    byid = {i["id"]: i for i in items if i["id"]}
     for h, t in links:
-        if PROD_RE.search(h) and h not in seen:
-            seen.add(h)
-            items.append({"url": h, "n": t or None})
+        if not PROD_RE.search(h):
+            continue
+        k = pid(h)
+        if k in byid:
+            byid[k]["url"] = byid[k]["url"] or h
+        elif k:
+            byid[k] = {"url": h, "n": t or None, "id": k}
+            items.append(byid[k])
+    items = [i for i in items if i.get("id")]
     txt = re.sub(r"\s+", " ", await s.page.locator("body").inner_text())
     m = re.search(r"(\d[\d  ]*)\s*(?:produkt|wynik)", txt, re.I)
     total = int(re.sub(r"\D", "", m.group(1))) if m else None
@@ -83,17 +102,17 @@ async def crawl(key, lists, out):
             pos = 0
             for it in items:
                 pos += 1
-                found.setdefault(it["url"], {**it, "lista": lst, "poz": pos})
+                found.setdefault(it["id"], {**it, "lista": lst, "poz": pos})
             param, page = None, 2
-            for cand in ("page", "p", "pageNumber"):
+            for cand in ("p", "page", "pageNumber"):
                 await s.goto(_with_page(lst, cand, 2))
                 nxt, _ = await read_page(s)
-                new = [i for i in nxt if i["url"] not in {x["url"] for x in items}]
+                new = [i for i in nxt if i["id"] not in {x["id"] for x in items} and i.get("c") is not None]
                 if len(new) >= 5:
                     param = cand
                     for it in nxt:
                         pos += 1
-                        found.setdefault(it["url"], {**it, "lista": lst, "poz": pos})
+                        found.setdefault(it["id"], {**it, "lista": lst, "poz": pos})
                     break
             print(f"   paginacja: {param}")
             empty = 0
@@ -102,10 +121,10 @@ async def crawl(key, lists, out):
                 await asyncio.sleep(random.uniform(2, 5))
                 await s.goto(_with_page(lst, param, page))
                 nxt, _ = await read_page(s)
-                new = [i for i in nxt if i["url"] not in found]
+                new = [i for i in nxt if i["id"] not in found and i.get("c") is not None]
                 for it in nxt:
                     pos += 1
-                    found.setdefault(it["url"], {**it, "lista": lst, "poz": pos})
+                    found.setdefault(it["id"], {**it, "lista": lst, "poz": pos})
                 if not new:
                     empty += 1
                     if empty >= 2:
