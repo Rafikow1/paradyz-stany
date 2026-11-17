@@ -8,9 +8,7 @@ jobs:
       matrix:
         include:
           - siec: leroy
-            url: "https://www.leroymerlin.pl/produkty/plytki-i-podlogi/"
-          - siec: obi
-            url: "https://www.obi.pl/search/glazura/ https://www.obi.pl/search/gres/"
+            url: "https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-podlogowe/"
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

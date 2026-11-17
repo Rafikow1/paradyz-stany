@@ -46,7 +46,10 @@ async def main(key):
             ld = await s.page.locator("script[type='application/ld+json']").all_text_contents()
             print("   JSON-LD typy:", re.findall(r'"@type"\s*:\s*"(\w+)"', " ".join(ld))[:15])
             print("   filtry/producent:", [txt[m.start()-20:m.end()+120] for m in re.finditer(r"Producent|Marka", txt)][:3])
-            nxt = [p for p in prod if re.search(r"page=|strona|p=2|/2/", p)][:5]
+            nxt = [p for p in prod if re.search(r"page=|strona|p=2|/2/|[?&]p=", p)][:8]
+            btn = await s.page.eval_on_selector_all("a,button", "els => els.map(e => (e.innerText||'').trim()).filter(t => /więcej|następn|wszystk|stron|\\d+ z \\d+/i.test(t)).slice(0,20)")
+            print("   PRZYCISKI:", btn)
+            print("   TEKST:", txt[:200], "...", [txt[m.start()-60:m.end()+60] for m in re.finditer(r"wyświetl|z \d+ produkt|Pokaż", txt, re.I)][:6])
             print("   paginacja:", nxt)
             sub = sorted({p.split("?")[0].split("#")[0] for p in prod if re.search(r"plytk|glazur|gres|/c/|\.cat", p, re.I) and "/p/" not in p and ".prd" not in p and not p.endswith(".html")})
             print("   PODKATEGORIE:", len(sub))
