@@ -1,6 +1,10 @@
 name: Baza płytek (katalog)
 on:
   workflow_dispatch:
+    inputs:
+      siec:
+        description: "tylko ta sieć (puste = wszystkie)"
+        default: ""
 env:
   DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
   PYTHONUNBUFFERED: "1"
@@ -21,12 +25,16 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
+        if: inputs.siec == '' || inputs.siec == matrix.siec
       - uses: actions/setup-python@v5
+        if: inputs.siec == '' || inputs.siec == matrix.siec
         with:
           python-version: "3.13"
           cache: pip
       - run: pip install -r requirements.txt && python -m playwright install --with-deps chromium
-      - run: |
+        if: inputs.siec == '' || inputs.siec == matrix.siec
+      - if: inputs.siec == '' || inputs.siec == matrix.siec
+        run: |
           mkdir -p data out
           xvfb-run -a python -m utils.katalog ${{ matrix.siec }} out/katalog_${{ matrix.siec }}.json ${{ matrix.listy }}
           python -m utils.publish encrypt out/katalog_${{ matrix.siec }}.json out/katalog_${{ matrix.siec }}.json.enc
@@ -52,7 +60,9 @@ jobs:
       - env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cd k && ls -la && git init -q -b katalog
+          mkdir -p k && cd k
+          for f in castorama obi leroy; do [ -f katalog_$f.json.enc ] || curl -sf -o katalog_$f.json.enc "https://raw.githubusercontent.com/${{ github.repository }}/katalog/katalog_$f.json.enc" || rm -f katalog_$f.json.enc; done
+          ls -la && git init -q -b katalog
           git config user.name "katalog" && git config user.email "actions@users.noreply.github.com"
           git add . && git commit -qm "Katalog $(date +'%Y-%m-%d %H:%M')"
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" katalog
