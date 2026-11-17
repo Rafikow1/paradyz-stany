@@ -1,0 +1,58 @@
+name: Baza płytek (katalog)
+on:
+  workflow_dispatch:
+env:
+  DATA_PASSWORD: ${{ secrets.DATA_PASSWORD }}
+  PYTHONUNBUFFERED: "1"
+  TZ: Europe/Warsaw
+jobs:
+  zbierz:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - siec: castorama
+            listy: "https://www.castorama.pl/plytki-i-podlogi/plytki-podlogowe/plytki-ceramiczne/gres.cat https://www.castorama.pl/plytki-i-podlogi/plytki-scienne/glazura.cat https://www.castorama.pl/plytki-i-podlogi/plytki-scienne/dekory-i-mozaiki.cat"
+          - siec: obi
+            listy: "https://www.obi.pl/search/glazura/ https://www.obi.pl/search/gres/ https://www.obi.pl/search/p%C5%82ytki/"
+          - siec: leroy
+            listy: "https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-podlogowe/ https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-scienne/"
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt && python -m playwright install --with-deps chromium
+      - run: |
+          mkdir -p data out
+          xvfb-run -a python -m utils.katalog ${{ matrix.siec }} out/katalog_${{ matrix.siec }}.json ${{ matrix.listy }}
+          python -m utils.publish encrypt out/katalog_${{ matrix.siec }}.json out/katalog_${{ matrix.siec }}.json.enc
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: katalog-${{ matrix.siec }}
+          path: out/*.enc
+          retention-days: 30
+          if-no-files-found: ignore
+  zapisz:
+    needs: zbierz
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: katalog-*
+          path: k
+          merge-multiple: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd k && ls -la && git init -q -b katalog
+          git config user.name "katalog" && git config user.email "actions@users.noreply.github.com"
+          git add . && git commit -qm "Katalog $(date +'%Y-%m-%d %H:%M')"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" katalog
