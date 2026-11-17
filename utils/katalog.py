@@ -84,6 +84,8 @@ async def read_page(s):
             byid[k] = {"url": h, "n": t or None, "id": k}
             items.append(byid[k])
     items = [i for i in items if i.get("id")]
+    ld = [i for i in items if "e" in i]          # produkty z danych listy (JSON-LD), bez "polecanych"
+    items = ld if len(ld) >= 5 else items
     txt = re.sub(r"\s+", " ", await s.page.locator("body").inner_text())
     m = re.search(r"(\d[\d  ]*)\s*(?:produkt|wynik)", txt, re.I)
     total = int(re.sub(r"\D", "", m.group(1))) if m else None
@@ -103,25 +105,15 @@ async def crawl(key, lists, out):
             for it in items:
                 pos += 1
                 found.setdefault(it["id"], {**it, "lista": lst, "poz": pos})
-            param, page = None, 2
-            for cand in ("p", "page", "pageNumber"):
-                await s.goto(_with_page(lst, cand, 2))
-                nxt, _ = await read_page(s)
-                new = [i for i in nxt if i["id"] not in {x["id"] for x in items} and i.get("c") is not None]
-                if len(new) >= 5:
-                    param = cand
-                    for it in nxt:
-                        pos += 1
-                        found.setdefault(it["id"], {**it, "lista": lst, "poz": pos})
-                    break
+            param, page = {"leroy": "p", "obi": "page", "castorama": "page"}[key], 1
             print(f"   paginacja: {param}")
             empty = 0
-            while param and page < 200:
+            while page < 120:
                 page += 1
                 await asyncio.sleep(random.uniform(2, 5))
                 await s.goto(_with_page(lst, param, page))
                 nxt, _ = await read_page(s)
-                new = [i for i in nxt if i["id"] not in found and i.get("c") is not None]
+                new = [i for i in nxt if i["id"] not in found]
                 for it in nxt:
                     pos += 1
                     found.setdefault(it["id"], {**it, "lista": lst, "poz": pos})
