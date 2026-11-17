@@ -20,9 +20,9 @@ jobs:
           - siec: obi
             listy: "https://www.obi.pl/search/glazura/ https://www.obi.pl/search/gres/ https://www.obi.pl/search/p%C5%82ytki/"
           - siec: leroy
-            listy: "https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-podlogowe/ https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-scienne/"
+            listy: "https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-podlogowe/gres/ https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-podlogowe/plytki-do-wnetrz/ https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-scienne/plytki-lazienkowe/ https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-scienne/plytki-kuchenne/ https://www.leroymerlin.pl/produkty/wykonczenie-wnetrz/plytki-scienne-i-podlogowe/plytki-wielkoformatowe/"
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
         if: inputs.siec == '' || inputs.siec == matrix.siec
