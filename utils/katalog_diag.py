@@ -27,7 +27,7 @@ async def main(key):
         for h, t in list(tile.items())[:60]:
             print("  ", h, "|", t)
         extra = sys.argv[2:] or []
-        cands = extra + [h for h in tile if re.search(r"p[lł]ytk", h, re.I)][:3]
+        cands = extra or [h for h in tile if re.search(r"p[lł]ytk", h, re.I)][:3]
         for url in cands[:4]:
             api.clear()
             print(f"\n##### {key}: KATEGORIA {url}")
@@ -48,6 +48,10 @@ async def main(key):
             print("   filtry/producent:", [txt[m.start()-20:m.end()+120] for m in re.finditer(r"Producent|Marka", txt)][:3])
             nxt = [p for p in prod if re.search(r"page=|strona|p=2|/2/", p)][:5]
             print("   paginacja:", nxt)
+            sub = sorted({p.split("?")[0].split("#")[0] for p in prod if re.search(r"plytk|glazur|gres|/c/|\.cat", p, re.I) and "/p/" not in p and ".prd" not in p and not p.endswith(".html")})
+            print("   PODKATEGORIE:", len(sub))
+            for x in sub[:80]:
+                print("      ", x)
             print("   JSON API:", [u for u in api if not re.search(r"google|facebook|analytics|doubleclick|cookie|consent", u)][:25])
 
 

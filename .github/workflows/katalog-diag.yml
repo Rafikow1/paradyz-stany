@@ -6,7 +6,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        siec: [leroy, castorama, obi]
+        include:
+          - siec: leroy
+            url: "https://www.leroymerlin.pl/produkty/plytki-i-podlogi/"
+          - siec: obi
+            url: "https://www.obi.pl/search/glazura/ https://www.obi.pl/search/gres/"
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -16,4 +20,4 @@ jobs:
           python-version: "3.13"
           cache: pip
       - run: pip install -r requirements.txt && python -m playwright install --with-deps chromium
-      - run: mkdir -p data && xvfb-run -a python -m utils.katalog_diag ${{ matrix.siec }}
+      - run: mkdir -p data && xvfb-run -a python -m utils.katalog_diag ${{ matrix.siec }} ${{ matrix.url }}
